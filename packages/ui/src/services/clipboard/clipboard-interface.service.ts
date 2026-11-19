@@ -263,7 +263,7 @@ export class BrowserClipboardService extends Disposable implements IClipboardInt
 
     private _legacyCopyHtml(text: string, html: string): void {
         const activeElement = document.activeElement;
-        const sanitizedHtml = serializeSanitizedHtmlForClipboard(html);
+        const { html: sanitizedHtml, fragment: sanitizedFragment } = prepareSanitizedHtmlForClipboard(html);
         let handledByClipboardEvent = false;
 
         const onCopy = (event: ClipboardEvent) => {
@@ -284,8 +284,8 @@ export class BrowserClipboardService extends Disposable implements IClipboardInt
 
             if (!handledByClipboardEvent) {
                 const container = createCopyHtmlContainer();
+                container.appendChild(sanitizedFragment);
                 document.body.appendChild(container);
-                container.innerHTML = sanitizedHtml;
 
                 try {
                     select(container);
@@ -370,19 +370,41 @@ function sanitizeHtmlForClipboard(html: string): DocumentFragment {
     return fragment;
 }
 
-function serializeSanitizedHtmlForClipboard(html: string): string {
+function prepareSanitizedHtmlForClipboard(html: string) {
+    const fragment = sanitizeHtmlForClipboard(html);
     const container = document.createElement('div');
-    container.appendChild(sanitizeHtmlForClipboard(html));
+    container.appendChild(fragment.cloneNode(true));
     const sanitizedHtml = container.innerHTML;
     const isUniverExcelHtml = html.includes('xmlns:x="urn:schemas-microsoft-com:office:excel"')
         && html.includes('<meta name="ProgId" content="Excel.Sheet">')
         && html.includes('<meta name="Generator" content="Univer">');
 
     if (!isUniverExcelHtml) {
-        return sanitizedHtml;
+        return { html: sanitizedHtml, fragment };
     }
 
-    return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="ProgId" content="Excel.Sheet"><meta name="Generator" content="Univer"></head><body><!--StartFragment-->${sanitizedHtml}<!--EndFragment--></body></html>`;
+    // Preserve the selection fallback's fixed Excel metadata without reparsing HTML in the live document.
+    const excelFragment = document.createDocumentFragment();
+    const metadata: Record<string, string>[] = [
+        { 'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8' },
+        { name: 'ProgId', content: 'Excel.Sheet' },
+        { name: 'Generator', content: 'Univer' },
+    ];
+    for (const attributes of metadata) {
+        const meta = document.createElement('meta');
+        for (const [name, value] of Object.entries(attributes)) {
+            meta.setAttribute(name, value);
+        }
+        excelFragment.appendChild(meta);
+    }
+    excelFragment.appendChild(document.createComment('StartFragment'));
+    excelFragment.appendChild(fragment);
+    excelFragment.appendChild(document.createComment('EndFragment'));
+
+    return {
+        html: `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="ProgId" content="Excel.Sheet"><meta name="Generator" content="Univer"></head><body><!--StartFragment-->${sanitizedHtml}<!--EndFragment--></body></html>`,
+        fragment: excelFragment,
+    };
 }
 
 function sanitizeHtmlNode(node: Node): Node | null {

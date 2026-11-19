@@ -62,6 +62,8 @@ describe('BrowserClipboardService', () => {
     afterEach(() => {
         vi.restoreAllMocks();
         vi.unstubAllGlobals();
+        document.body.replaceChildren();
+        window.getSelection()?.removeAllRanges();
     });
 
     it('should expose clipboard support from utility', () => {
@@ -193,6 +195,112 @@ describe('BrowserClipboardService', () => {
         expect(image?.hasAttribute('onerror')).toBe(false);
         expect(span?.getAttribute('style')).toContain('color: red');
         expect(span?.getAttribute('style')).not.toContain('url(');
+    });
+
+    it('should attach sanitized nodes without parsing HTML strings in the live fallback container', async () => {
+        vi.mocked(supportClipboardAPI).mockReturnValue(false);
+        const { service } = createService();
+        const descriptor = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML')!;
+        let liveHtmlWrites = 0;
+        let copiedContainer: Element | undefined;
+
+        vi.spyOn(Element.prototype, 'innerHTML', 'set').mockImplementation(function (this: Element, value: string) {
+            if (this.isConnected) {
+                liveHtmlWrites++;
+            }
+            descriptor.set!.call(this, value);
+        });
+        vi.mocked(document.execCommand).mockImplementation(() => {
+            const container = document.body.lastElementChild;
+            if (container instanceof HTMLDivElement) {
+                copiedContainer = container.cloneNode(true) as Element;
+            }
+            return true;
+        });
+
+        await service.write('rich', '<table data-copy-id="safe"><tr><td rowspan="2" onclick="alert(1)">rich</td></tr></table>');
+
+        expect(liveHtmlWrites).toBe(0);
+        expect(copiedContainer?.querySelector('table')?.getAttribute('data-copy-id')).toBe('safe');
+        expect(copiedContainer?.querySelector('td')?.getAttribute('rowspan')).toBe('2');
+        expect(copiedContainer?.querySelector('[onclick]')).toBeNull();
+        expect(copiedContainer?.textContent).toBe('rich');
+        expect(document.body.childElementCount).toBe(0);
+    });
+
+    it.each([
+        ['scripts and handlers', '<div onclick="alert(1)">rich<img src="/image" onerror="alert(1)"><script>alert(1)</script></div>'],
+        ['encoded protocols', '<a href="java&#x73;cript:alert(1)">rich</a><a href="java&#10;script:alert(1)">text</a>'],
+        ['namespace content', '<svg><foreignObject><div onmouseover="alert(1)">rich</div></foreignObject></svg><math><mtext><img src="/image" onerror="alert(1)"></mtext></math>'],
+        ['forms and templates', '<form><input autofocus onfocus="alert(1)"></form><template><img src="/image" onerror="alert(1)"></template>rich'],
+        ['embedded documents', '<iframe srcdoc="<script>alert(1)</script>"></iframe><object data="javascript:alert(1)"></object><embed src="/frame">rich'],
+        ['escaped markup', '<div>&lt;img src="/image" onerror="alert(1)"&gt;</div>'],
+        ['style content', '<span style="color:red;background-image:url(javascript:alert(1));width:expression(alert(1))">rich</span>'],
+        ['quoted attributes', '<a href="https://example.invalid/" title="&quot; onmouseover=&quot;alert(1)">rich</a>'],
+    ])('should retain sanitization through the actual selection fallback: %s', async (_name, html) => {
+        vi.mocked(supportClipboardAPI).mockReturnValue(false);
+        const { service } = createService();
+        let copiedContainer: Element | undefined;
+        vi.mocked(document.execCommand).mockImplementation(() => {
+            const container = document.body.lastElementChild;
+            if (container instanceof HTMLDivElement) {
+                copiedContainer = container.cloneNode(true) as Element;
+            }
+            return true;
+        });
+
+        await service.write('plain', html);
+
+        expect(copiedContainer).toBeDefined();
+        expect(copiedContainer!.querySelector('script,iframe,object,embed,form,input,template,style,link,meta,svg,math')).toBeNull();
+        for (const element of Array.from(copiedContainer!.querySelectorAll('*'))) {
+            for (const attribute of Array.from(element.attributes)) {
+                expect(attribute.name.startsWith('on')).toBe(false);
+                if (attribute.name === 'href' || attribute.name === 'src') {
+                    expect(attribute.value).not.toMatch(/javascript:|vbscript:/i);
+                }
+                if (attribute.name === 'style') {
+                    expect(attribute.value).not.toMatch(/url\s*\(|expression\s*\(/i);
+                }
+            }
+        }
+        expect(document.body.childElementCount).toBe(0);
+    });
+
+    it('should preserve the fixed Excel metadata and table in the selection fallback', async () => {
+        vi.mocked(supportClipboardAPI).mockReturnValue(false);
+        const { service } = createService();
+        let copiedHtml = '';
+        vi.mocked(document.execCommand).mockImplementation(() => {
+            copiedHtml = document.body.lastElementChild?.innerHTML ?? '';
+            return true;
+        });
+
+        await service.write('merged', '<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta name="ProgId" content="Excel.Sheet"><meta name="Generator" content="Univer"><meta http-equiv="refresh" content="0;url=https://example.invalid/"></head><body><table data-copy-id="safe"><tr><td rowspan="3" onclick="alert(1)">merged</td></tr></table></body></html>');
+
+        expect(copiedHtml).toBe('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="ProgId" content="Excel.Sheet"><meta name="Generator" content="Univer"><!--StartFragment--><table data-copy-id="safe"><tbody><tr><td rowspan="3">merged</td></tr></tbody></table><!--EndFragment-->');
+        expect(document.body.childElementCount).toBe(0);
+    });
+
+    it('should restore focus and remove the fallback and copy listener when native copy throws', async () => {
+        vi.mocked(supportClipboardAPI).mockReturnValue(false);
+        const { service } = createService();
+        const input = document.createElement('input');
+        document.body.appendChild(input);
+        input.focus();
+        vi.mocked(document.execCommand).mockImplementationOnce(() => true).mockImplementationOnce(() => {
+            throw new Error('native copy failed');
+        });
+
+        await expect(service.write('rich', '<b>rich</b>')).rejects.toThrow('native copy failed');
+
+        expect(document.body.children).toHaveLength(1);
+        expect(document.activeElement).toBe(input);
+        const clipboardData = { setData: vi.fn() };
+        const event = new Event('copy', { cancelable: true });
+        Object.defineProperty(event, 'clipboardData', { value: clipboardData });
+        document.dispatchEvent(event);
+        expect(clipboardData.setData).not.toHaveBeenCalled();
     });
 
     it('should show notification when write/writeText fails', async () => {
