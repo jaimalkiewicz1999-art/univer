@@ -127,38 +127,7 @@ jobs:
                   INSTALL_OUTCOME: ${{ steps.install-semgrep.outcome }}
                   SARIF_UPLOAD_OUTCOME: ${{ steps.upload-sarif.outcome }}
               run: |
-                  python - <<'PY'
-                  import json
-                  import os
-                  from pathlib import Path
-
-                  report_path = Path("reports/semgrep.sarif")
-                  with report_path.open() as file:
-                      sarif = json.load(file)
-
-                  results = []
-                  for run in sarif.get("runs", []):
-                      results.extend(run.get("results", []))
-
-                  counts = {"error": 0, "warning": 0, "note": 0, "other": 0}
-                  for result in results:
-                      level = result.get("level", "warning")
-                      counts[level if level in counts else "other"] += 1
-
-                  sarif_upload_outcome = os.environ.get("SARIF_UPLOAD_OUTCOME") or "skipped"
-
-                  with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
-                      summary.write("## Semgrep report\n")
-                      summary.write(f"- Total findings: {len(results)}\n")
-                      summary.write(f"- Error: {counts['error']}\n")
-                      summary.write(f"- Warning: {counts['warning']}\n")
-                      summary.write(f"- Note: {counts['note']}\n")
-                      summary.write(f"- Other: {counts['other']}\n")
-                      summary.write(f"- Exit code: {os.environ['SEMGREP_EXIT_CODE']}\n")
-                      summary.write(f"- Semgrep install: {os.environ['INSTALL_OUTCOME']}\n")
-                      summary.write("- Artifact: `semgrep-sarif-${{ github.run_id }}`\n")
-                      summary.write(f"- Code scanning upload: {sarif_upload_outcome}\n")
-                  PY
+                  python .github/scripts/semgrep_sarif.py summary --artifact "semgrep-sarif-${{ github.run_id }}"
 
             - name: Fail on Semgrep error findings or execution errors
               if: ${{ always() }}
@@ -177,34 +146,4 @@ jobs:
                     exit "$SEMGREP_EXIT_CODE"
                   fi
 
-                  python - <<'PY'
-                  import json
-                  import sys
-                  from pathlib import Path
-
-                  report_path = Path("reports/semgrep.sarif")
-                  with report_path.open() as file:
-                      sarif = json.load(file)
-
-                  failed_invocations = [
-                      invocation
-                      for run in sarif.get("runs", [])
-                      for invocation in run.get("invocations", [])
-                      if invocation.get("executionSuccessful") is False
-                  ]
-                  if failed_invocations:
-                      print("Semgrep reported an unsuccessful scanner invocation.")
-                      sys.exit(2)
-
-                  error_results = [
-                      result
-                      for run in sarif.get("runs", [])
-                      for result in run.get("results", [])
-                      if result.get("level") == "error"
-                  ]
-
-                  if error_results:
-                      print(f"Semgrep reported {len(error_results)} error-level finding(s).")
-                      print("See the uploaded SARIF artifact for details.")
-                      sys.exit(1)
-                  PY
+                  python .github/scripts/semgrep_sarif.py gate
