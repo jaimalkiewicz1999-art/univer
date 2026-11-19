@@ -38,6 +38,10 @@ jobs:
               continue-on-error: true
               run: python -m pip install --upgrade pip semgrep
 
+            - name: Test Semgrep workflow failure handling
+              if: ${{ steps.install-semgrep.outcome == 'success' }}
+              run: python .github/scripts/test_semgrep_workflow.py
+
             - name: Run Semgrep
               id: semgrep
               if: ${{ always() }}
@@ -60,6 +64,10 @@ jobs:
                   fi
 
                   if [ ! -s reports/semgrep.sarif ]; then
+                    # A successful exit without a report is still a scan failure.
+                    if [ "$exit_code" -eq 0 ]; then
+                      exit_code=2
+                    fi
                     printf '%s\n' \
                       '{' \
                       '  "version": "2.1.0",' \
@@ -177,6 +185,16 @@ jobs:
                   report_path = Path("reports/semgrep.sarif")
                   with report_path.open() as file:
                       sarif = json.load(file)
+
+                  failed_invocations = [
+                      invocation
+                      for run in sarif.get("runs", [])
+                      for invocation in run.get("invocations", [])
+                      if invocation.get("executionSuccessful") is False
+                  ]
+                  if failed_invocations:
+                      print("Semgrep reported an unsuccessful scanner invocation.")
+                      sys.exit(2)
 
                   error_results = [
                       result
