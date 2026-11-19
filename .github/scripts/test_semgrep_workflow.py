@@ -50,7 +50,8 @@ def report(*, successful=True, level=None, rules=None, results=None):
 
 
 class SemgrepWorkflowTests(unittest.TestCase):
-    def execute(self, *, output, scanner_exit=0, installed=True, expected_counts=None):
+    def execute(self, *, output, scanner_exit=0, installed=True, expected_counts=None,
+                expected_summary_exit=None):
         with tempfile.TemporaryDirectory(prefix="semgrep-workflow-test-") as directory:
             root = Path(directory)
             binaries = root / "bin"
@@ -93,6 +94,11 @@ class SemgrepWorkflowTests(unittest.TestCase):
                 ["bash", "-e", "-o", "pipefail", "-c", summary_script.replace("${{ github.run_id }}", "controlled-test")],
                 cwd=root, env=environment, capture_output=True, text=True, timeout=15,
             )
+            if expected_summary_exit is not None:
+                self.assertEqual(summary.returncode, expected_summary_exit, summary.stderr)
+                if expected_summary_exit != 0:
+                    summary_file = root / "summary"
+                    self.assertFalse(summary_file.exists(), "Invalid scan evidence must not render clean counts")
             if expected_counts is not None:
                 self.assertEqual(summary.returncode, 0, summary.stderr)
                 rendered = (root / "summary").read_text(encoding="utf-8")
@@ -112,7 +118,7 @@ class SemgrepWorkflowTests(unittest.TestCase):
         self.assertEqual(self.execute(output=""), 2)
 
     def test_explicit_failed_invocation_is_a_scan_failure(self):
-        self.assertEqual(self.execute(output=report(successful=False)), 2)
+        self.assertEqual(self.execute(output=report(successful=False), expected_summary_exit=2), 2)
 
     def test_install_failure_does_not_run_scanner(self):
         self.assertEqual(self.execute(output=None, installed=False), 2)
@@ -127,7 +133,45 @@ class SemgrepWorkflowTests(unittest.TestCase):
         self.assertEqual(self.execute(output=report(level="warning")), 0)
 
     def test_valid_zero_finding_report_passes(self):
-        self.assertEqual(self.execute(output=report()), 0)
+        self.assertEqual(self.execute(
+            output=report(), expected_summary_exit=0,
+            expected_counts={"error": 0, "warning": 0, "note": 0, "other": 0},
+        ), 0)
+
+    def test_missing_or_invalid_report_structure_fails(self):
+        invalid = [None, [], {}, {"version": "2.1.0", "runs": []},
+                   {"version": "2.1.0", "runs": [{}]}]
+        for field, value in (("version", None), ("version", "2.0.0"), ("runs", None),
+                             ("runs", {}), ("runs", [None])):
+            data = json.loads(report())
+            data[field] = value
+            invalid.append(data)
+        for field, value in (("tool", None), ("tool", {}), ("tool", {"driver": {}}),
+                             ("tool", {"driver": {"name": ""}}),
+                             ("tool", {"driver": {"name": 1}}),
+                             ("results", None), ("results", {}), ("results", [None])):
+            data = json.loads(report())
+            data["runs"][0][field] = value
+            invalid.append(data)
+        for index, data in enumerate(invalid):
+            with self.subTest(case=index):
+                self.assertEqual(self.execute(output=json.dumps(data), expected_summary_exit=2), 2)
+
+    def test_missing_or_non_boolean_invocation_evidence_fails(self):
+        for invocations in (None, [], {}, [None], [{}],
+                            [{"executionSuccessful": None}], [{"executionSuccessful": "true"}],
+                            [{"executionSuccessful": 0}], [{"executionSuccessful": 1}]):
+            data = json.loads(report())
+            data["runs"][0]["invocations"] = invocations
+            with self.subTest(invocations=invocations):
+                self.assertEqual(self.execute(output=json.dumps(data), expected_summary_exit=2), 2)
+
+    def test_every_run_requires_successful_scan_evidence(self):
+        for extra in ({}, json.loads(report(successful=False))["runs"][0]):
+            data = json.loads(report())
+            data["runs"].append(extra)
+            with self.subTest(extra=extra):
+                self.assertEqual(self.execute(output=json.dumps(data), expected_summary_exit=2), 2)
 
     def test_malformed_report_fails(self):
         self.assertNotEqual(self.execute(output="invalid SARIF"), 0)

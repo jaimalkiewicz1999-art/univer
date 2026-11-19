@@ -49,14 +49,44 @@ def report_counts(sarif):
     return counts, failed_invocations
 
 
+def validate_scan_evidence(sarif):
+    """Require completed-scan evidence, not full SARIF schema validation."""
+    if not isinstance(sarif, dict) or sarif.get("version") != "2.1.0":
+        raise ValueError("Invalid SARIF version")
+    runs = sarif.get("runs")
+    if not isinstance(runs, list) or not runs:
+        raise ValueError("Missing SARIF runs")
+    for run in runs:
+        if not isinstance(run, dict) or not isinstance(run.get("tool"), dict):
+            raise ValueError("Missing SARIF tool")
+        driver = run["tool"].get("driver")
+        if not isinstance(driver, dict) or not isinstance(driver.get("name"), str) or not driver["name"]:
+            raise ValueError("Missing SARIF driver name")
+        results = run.get("results")
+        if not isinstance(results, list) or any(not isinstance(result, dict) for result in results):
+            raise ValueError("Invalid SARIF results")
+        invocations = run.get("invocations")
+        if not isinstance(invocations, list) or not invocations:
+            raise ValueError("Missing scanner invocation evidence")
+        if any(not isinstance(invocation, dict) or invocation.get("executionSuccessful") is not True
+               for invocation in invocations):
+            raise ValueError("Missing or unsuccessful scanner execution status")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("mode", choices=("summary", "gate"))
     parser.add_argument("--report", type=Path, default=Path("reports/semgrep.sarif"))
     parser.add_argument("--artifact", default="semgrep-sarif")
     args = parser.parse_args()
-    with args.report.open(encoding="utf-8") as file:
-        counts, failed_invocations = report_counts(json.load(file))
+    try:
+        with args.report.open(encoding="utf-8") as file:
+            sarif = json.load(file)
+        validate_scan_evidence(sarif)
+        counts, failed_invocations = report_counts(sarif)
+    except (OSError, ValueError, TypeError, AttributeError):
+        print("Semgrep SARIF is invalid or lacks successful scanner invocation evidence.")
+        return 2
     if args.mode == "summary":
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
             summary.write("## Semgrep report\n")
