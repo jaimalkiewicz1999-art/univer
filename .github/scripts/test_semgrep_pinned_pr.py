@@ -18,6 +18,9 @@ import semgrep_pinned_pr as wrapper
 
 
 PRIVATE = "PRIVATE_FINDING_DO_NOT_PUBLISH"
+# This exact application-only workflow was reviewed independently. Any change
+# requires a new review; its same-repository guard is not a general exception.
+REVIEWED_APPLICATION_WORKFLOW_SHA256 = "dae134f086290e1318c1ee918d2462c9631c4399883d2a8a1c62a91786f22646"
 LOG = (
     PRIVATE + " /private/source.js unsafe example\n"
     "Rules run: 191\nTargets scanned: 7233\nFindings: 154\n"
@@ -202,7 +205,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn("secrets.", json.dumps(self.workflow))
         self.assertNotIn("security-events", json.dumps(self.workflow))
 
-    def test_existing_workflows_cannot_invoke_auto_scan_on_this_pr_update(self):
+    def assert_workflow_admission(self):
         auto = self.yaml.load((self.directory / "security-semgrep.yml").read_text())
         self.assertEqual(set(auto["on"]), {"push", "workflow_dispatch"})
         self.assertEqual(auto["on"]["push"]["branches"], ["main", "dev"])
@@ -214,12 +217,47 @@ class WorkflowTests(unittest.TestCase):
         for path in self.directory.glob("*.yml"):
             if path.name == "security-semgrep-pinned-pr.yml":
                 continue
+            if path.name == "clipboard-pr-acceptance.yml":
+                self.assertEqual(wrapper.digest(path), REVIEWED_APPLICATION_WORKFLOW_SHA256,
+                                 "Application workflow changed; review its complete execution scope")
+                continue
             workflow = self.yaml.load(path.read_text())
             self.assertNotIn("workflow_run", workflow["on"])
             self.assertNotIn("pull_request_target", workflow["on"])
             if "pull_request" in workflow["on"]:
                 for job in workflow["jobs"].values():
                     self.assertIn(job["if"], allowed_conditions, path.name)
+
+    def test_existing_workflows_cannot_invoke_auto_scan_on_this_pr_update(self):
+        self.assert_workflow_admission()
+
+    def test_unreviewed_application_workflow_mutations_are_rejected(self):
+        original = (self.directory / "clipboard-pr-acceptance.yml").read_text()
+        auto = (self.directory / "security-semgrep.yml").read_text()
+        mutations = [
+            original.replace("pull_request:", "pull_request_target:", 1),
+            original.replace("contents: read", "contents: write", 1),
+            original.replace("jaimalkiewicz1999-art/univer", "unreviewed-owner/univer", 1),
+            original.replace("pnpm --filter @univerjs/ui typecheck", "semgrep --config auto .", 1),
+            original.replace("persist-credentials: false", "persist-credentials: true", 1),
+        ]
+        for mutated in mutations:
+            self.assertNotEqual(mutated, original)
+            with self.subTest(workflow=hashlib.sha256(mutated.encode()).hexdigest()), \
+                 tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / "security-semgrep.yml").write_text(auto)
+                (root / "clipboard-pr-acceptance.yml").write_text(mutated)
+                with patch.object(self, "directory", root), self.assertRaises(AssertionError):
+                    self.assert_workflow_admission()
+
+    def test_application_workflow_exception_does_not_admit_another_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "security-semgrep.yml").write_bytes((self.directory / "security-semgrep.yml").read_bytes())
+            (root / "unreviewed-application.yml").write_bytes((self.directory / "clipboard-pr-acceptance.yml").read_bytes())
+            with patch.object(self, "directory", root), self.assertRaises(AssertionError):
+                self.assert_workflow_admission()
 
     def test_manifest_pins_the_reviewed_source_and_bytes(self):
         manifest = json.loads(wrapper.MANIFEST.read_text())
