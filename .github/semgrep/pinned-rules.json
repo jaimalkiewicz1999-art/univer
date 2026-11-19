@@ -1,1002 +1,1002 @@
 {
-  "source": "https://github.com/semgrep/semgrep-rules",
-  "commit": "a5ad1714f00c9f7fde980cab0ea1d6dc6d414fd2",
-  "selection": [
-    "javascript",
-    "typescript",
-    "yaml/github-actions"
-  ],
-  "category": "security",
-  "modes": [
-    "search",
-    "taint"
-  ],
-  "rules": 196,
-  "config_sha256": "da388503c6694eb209146d3ac991a6ae967ed00d99e4d5b3d44670f3cafb9b2a",
-  "provenance": [
-    {
-      "path": "javascript/ajv/security/audit/ajv-allerrors-true.yaml",
-      "original_id": "ajv-allerrors-true",
-      "id": "local.javascript.ajv.security.audit.ajv-allerrors-true.ajv-allerrors-true"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-element-methods.yaml",
-      "original_id": "detect-angular-element-methods",
-      "id": "local.javascript.angular.security.detect-angular-element-methods.detect-angular-element-methods"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-element-taint.yaml",
-      "original_id": "detect-angular-element-taint",
-      "id": "local.javascript.angular.security.detect-angular-element-taint.detect-angular-element-taint"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-open-redirect.yaml",
-      "original_id": "detect-angular-open-redirect",
-      "id": "local.javascript.angular.security.detect-angular-open-redirect.detect-angular-open-redirect"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-resource-loading.yaml",
-      "original_id": "detect-angular-resource-loading",
-      "id": "local.javascript.angular.security.detect-angular-resource-loading.detect-angular-resource-loading"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-sce-disabled.yaml",
-      "original_id": "detect-angular-sce-disabled",
-      "id": "local.javascript.angular.security.detect-angular-sce-disabled.detect-angular-sce-disabled"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-trust-as-css.yaml",
-      "original_id": "detect-angular-trust-as-css-method",
-      "id": "local.javascript.angular.security.detect-angular-trust-as-css.detect-angular-trust-as-css-method"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-trust-as-html-method.yaml",
-      "original_id": "detect-angular-trust-as-html-method",
-      "id": "local.javascript.angular.security.detect-angular-trust-as-html-method.detect-angular-trust-as-html-method"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-trust-as-js-method.yaml",
-      "original_id": "detect-angular-trust-as-js-method",
-      "id": "local.javascript.angular.security.detect-angular-trust-as-js-method.detect-angular-trust-as-js-method"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-trust-as-method.yaml",
-      "original_id": "detect-angular-trust-as-method",
-      "id": "local.javascript.angular.security.detect-angular-trust-as-method.detect-angular-trust-as-method"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-trust-as-resourceurl-method.yaml",
-      "original_id": "detect-angular-trust-as-resourceurl-method",
-      "id": "local.javascript.angular.security.detect-angular-trust-as-resourceurl-method.detect-angular-trust-as-resourceurl-method"
-    },
-    {
-      "path": "javascript/angular/security/detect-angular-trust-as-url-method.yaml",
-      "original_id": "detect-angular-trust-as-url-method",
-      "id": "local.javascript.angular.security.detect-angular-trust-as-url-method.detect-angular-trust-as-url-method"
-    },
-    {
-      "path": "javascript/angular/security/detect-third-party-angular-translate.yaml",
-      "original_id": "detect-angular-translateprovider-translations-method",
-      "id": "local.javascript.angular.security.detect-third-party-angular-translate.detect-angular-translateprovider-translations-method"
-    },
-    {
-      "path": "javascript/apollo/security/apollo-axios-ssrf.yaml",
-      "original_id": "apollo-axios-ssrf",
-      "id": "local.javascript.apollo.security.apollo-axios-ssrf.apollo-axios-ssrf"
-    },
-    {
-      "path": "javascript/argon2/security/unsafe-argon2-config.yaml",
-      "original_id": "unsafe-argon2-config",
-      "id": "local.javascript.argon2.security.unsafe-argon2-config.unsafe-argon2-config"
-    },
-    {
-      "path": "javascript/audit/detect-replaceall-sanitization.yaml",
-      "original_id": "detect-replaceall-sanitization",
-      "id": "local.javascript.audit.detect-replaceall-sanitization.detect-replaceall-sanitization"
-    },
-    {
-      "path": "javascript/aws-lambda/security/detect-child-process.yaml",
-      "original_id": "detect-child-process",
-      "id": "local.javascript.aws-lambda.security.detect-child-process.detect-child-process"
-    },
-    {
-      "path": "javascript/aws-lambda/security/dynamodb-request-object.yaml",
-      "original_id": "dynamodb-request-object",
-      "id": "local.javascript.aws-lambda.security.dynamodb-request-object.dynamodb-request-object"
-    },
-    {
-      "path": "javascript/aws-lambda/security/knex-sqli.yaml",
-      "original_id": "knex-sqli",
-      "id": "local.javascript.aws-lambda.security.knex-sqli.knex-sqli"
-    },
-    {
-      "path": "javascript/aws-lambda/security/mysql-sqli.yaml",
-      "original_id": "mysql-sqli",
-      "id": "local.javascript.aws-lambda.security.mysql-sqli.mysql-sqli"
-    },
-    {
-      "path": "javascript/aws-lambda/security/pg-sqli.yaml",
-      "original_id": "pg-sqli",
-      "id": "local.javascript.aws-lambda.security.pg-sqli.pg-sqli"
-    },
-    {
-      "path": "javascript/aws-lambda/security/sequelize-sqli.yaml",
-      "original_id": "sequelize-sqli",
-      "id": "local.javascript.aws-lambda.security.sequelize-sqli.sequelize-sqli"
-    },
-    {
-      "path": "javascript/aws-lambda/security/tainted-eval.yaml",
-      "original_id": "tainted-eval",
-      "id": "local.javascript.aws-lambda.security.tainted-eval.tainted-eval"
-    },
-    {
-      "path": "javascript/aws-lambda/security/tainted-html-response.yaml",
-      "original_id": "tainted-html-response",
-      "id": "local.javascript.aws-lambda.security.tainted-html-response.tainted-html-response"
-    },
-    {
-      "path": "javascript/aws-lambda/security/tainted-html-string.yaml",
-      "original_id": "tainted-html-string",
-      "id": "local.javascript.aws-lambda.security.tainted-html-string.tainted-html-string"
-    },
-    {
-      "path": "javascript/aws-lambda/security/tainted-sql-string.yaml",
-      "original_id": "tainted-sql-string",
-      "id": "local.javascript.aws-lambda.security.tainted-sql-string.tainted-sql-string"
-    },
-    {
-      "path": "javascript/aws-lambda/security/vm-runincontext-injection.yaml",
-      "original_id": "vm-runincontext-injection",
-      "id": "local.javascript.aws-lambda.security.vm-runincontext-injection.vm-runincontext-injection"
-    },
-    {
-      "path": "javascript/bluebird/security/audit/tofastproperties-code-execution.yaml",
-      "original_id": "tofastproperties-code-execution",
-      "id": "local.javascript.bluebird.security.audit.tofastproperties-code-execution.tofastproperties-code-execution"
-    },
-    {
-      "path": "javascript/browser/security/dom-based-xss.yaml",
-      "original_id": "dom-based-xss",
-      "id": "local.javascript.browser.security.dom-based-xss.dom-based-xss"
-    },
-    {
-      "path": "javascript/browser/security/eval-detected.yaml",
-      "original_id": "eval-detected",
-      "id": "local.javascript.browser.security.eval-detected.eval-detected"
-    },
-    {
-      "path": "javascript/browser/security/insecure-document-method.yaml",
-      "original_id": "insecure-document-method",
-      "id": "local.javascript.browser.security.insecure-document-method.insecure-document-method"
-    },
-    {
-      "path": "javascript/browser/security/insecure-innerhtml.yaml",
-      "original_id": "insecure-innerhtml",
-      "id": "local.javascript.browser.security.insecure-innerhtml.insecure-innerhtml"
-    },
-    {
-      "path": "javascript/browser/security/insufficient-postmessage-origin-validation.yaml",
-      "original_id": "insufficient-postmessage-origin-validation",
-      "id": "local.javascript.browser.security.insufficient-postmessage-origin-validation.insufficient-postmessage-origin-validation"
-    },
-    {
-      "path": "javascript/browser/security/open-redirect-from-function.yaml",
-      "original_id": "js-open-redirect-from-function",
-      "id": "local.javascript.browser.security.open-redirect-from-function.js-open-redirect-from-function"
-    },
-    {
-      "path": "javascript/browser/security/open-redirect.yaml",
-      "original_id": "js-open-redirect",
-      "id": "local.javascript.browser.security.open-redirect.js-open-redirect"
-    },
-    {
-      "path": "javascript/browser/security/raw-html-concat.yaml",
-      "original_id": "raw-html-concat",
-      "id": "local.javascript.browser.security.raw-html-concat.raw-html-concat"
-    },
-    {
-      "path": "javascript/browser/security/raw-html-join.yaml",
-      "original_id": "raw-html-join",
-      "id": "local.javascript.browser.security.raw-html-join.raw-html-join"
-    },
-    {
-      "path": "javascript/browser/security/wildcard-postmessage-configuration.yaml",
-      "original_id": "wildcard-postmessage-configuration",
-      "id": "local.javascript.browser.security.wildcard-postmessage-configuration.wildcard-postmessage-configuration"
-    },
-    {
-      "path": "javascript/chrome-remote-interface/security/audit/chrome-remote-interface-compilescript-injection.yaml",
-      "original_id": "chrome-remote-interface-compilescript-injection",
-      "id": "local.javascript.chrome-remote-interface.security.audit.chrome-remote-interface-compilescript-injection.chrome-remote-interface-compilescript-injection"
-    },
-    {
-      "path": "javascript/deno/security/audit/deno-dangerous-run.yaml",
-      "original_id": "deno-dangerous-run",
-      "id": "local.javascript.deno.security.audit.deno-dangerous-run.deno-dangerous-run"
-    },
-    {
-      "path": "javascript/express/security/audit/express-check-csurf-middleware-usage.yaml",
-      "original_id": "express-check-csurf-middleware-usage",
-      "id": "local.javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage"
-    },
-    {
-      "path": "javascript/express/security/audit/express-check-directory-listing.yaml",
-      "original_id": "express-check-directory-listing",
-      "id": "local.javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing"
-    },
-    {
-      "path": "javascript/express/security/audit/express-cookie-settings.yaml",
-      "original_id": "express-cookie-session-default-name",
-      "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-default-name"
-    },
-    {
-      "path": "javascript/express/security/audit/express-cookie-settings.yaml",
-      "original_id": "express-cookie-session-no-secure",
-      "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-secure"
-    },
-    {
-      "path": "javascript/express/security/audit/express-cookie-settings.yaml",
-      "original_id": "express-cookie-session-no-httponly",
-      "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-httponly"
-    },
-    {
-      "path": "javascript/express/security/audit/express-cookie-settings.yaml",
-      "original_id": "express-cookie-session-no-domain",
-      "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-domain"
-    },
-    {
-      "path": "javascript/express/security/audit/express-cookie-settings.yaml",
-      "original_id": "express-cookie-session-no-path",
-      "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-path"
-    },
-    {
-      "path": "javascript/express/security/audit/express-cookie-settings.yaml",
-      "original_id": "express-cookie-session-no-expires",
-      "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-expires"
-    },
-    {
-      "path": "javascript/express/security/audit/express-detect-notevil-usage.yaml",
-      "original_id": "express-detect-notevil-usage",
-      "id": "local.javascript.express.security.audit.express-detect-notevil-usage.express-detect-notevil-usage"
-    },
-    {
-      "path": "javascript/express/security/audit/express-jwt-not-revoked.yaml",
-      "original_id": "express-jwt-not-revoked",
-      "id": "local.javascript.express.security.audit.express-jwt-not-revoked.express-jwt-not-revoked"
-    },
-    {
-      "path": "javascript/express/security/audit/express-libxml-noent.yaml",
-      "original_id": "express-libxml-noent",
-      "id": "local.javascript.express.security.audit.express-libxml-noent.express-libxml-noent"
-    },
-    {
-      "path": "javascript/express/security/audit/express-libxml-vm-noent.yaml",
-      "original_id": "express-libxml-vm-noent",
-      "id": "local.javascript.express.security.audit.express-libxml-vm-noent.express-libxml-vm-noent"
-    },
-    {
-      "path": "javascript/express/security/audit/express-open-redirect.yaml",
-      "original_id": "express-open-redirect",
-      "id": "local.javascript.express.security.audit.express-open-redirect.express-open-redirect"
-    },
-    {
-      "path": "javascript/express/security/audit/express-path-join-resolve-traversal.yaml",
-      "original_id": "express-path-join-resolve-traversal",
-      "id": "local.javascript.express.security.audit.express-path-join-resolve-traversal.express-path-join-resolve-traversal"
-    },
-    {
-      "path": "javascript/express/security/audit/express-res-sendfile.yaml",
-      "original_id": "express-res-sendfile",
-      "id": "local.javascript.express.security.audit.express-res-sendfile.express-res-sendfile"
-    },
-    {
-      "path": "javascript/express/security/audit/express-session-hardcoded-secret.yaml",
-      "original_id": "express-session-hardcoded-secret",
-      "id": "local.javascript.express.security.audit.express-session-hardcoded-secret.express-session-hardcoded-secret"
-    },
-    {
-      "path": "javascript/express/security/audit/express-ssrf.yaml",
-      "original_id": "express-ssrf",
-      "id": "local.javascript.express.security.audit.express-ssrf.express-ssrf"
-    },
-    {
-      "path": "javascript/express/security/audit/express-third-party-object-deserialization.yaml",
-      "original_id": "express-third-party-object-deserialization",
-      "id": "local.javascript.express.security.audit.express-third-party-object-deserialization.express-third-party-object-deserialization"
-    },
-    {
-      "path": "javascript/express/security/audit/express-xml2json-xxe-event.yaml",
-      "original_id": "express-xml2json-xxe-event",
-      "id": "local.javascript.express.security.audit.express-xml2json-xxe-event.express-xml2json-xxe-event"
-    },
-    {
-      "path": "javascript/express/security/audit/possible-user-input-redirect.yaml",
-      "original_id": "unknown-value-in-redirect",
-      "id": "local.javascript.express.security.audit.possible-user-input-redirect.unknown-value-in-redirect"
-    },
-    {
-      "path": "javascript/express/security/audit/remote-property-injection.yaml",
-      "original_id": "remote-property-injection",
-      "id": "local.javascript.express.security.audit.remote-property-injection.remote-property-injection"
-    },
-    {
-      "path": "javascript/express/security/audit/res-render-injection.yaml",
-      "original_id": "res-render-injection",
-      "id": "local.javascript.express.security.audit.res-render-injection.res-render-injection"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/direct-response-write.yaml",
-      "original_id": "direct-response-write",
-      "id": "local.javascript.express.security.audit.xss.direct-response-write.direct-response-write"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/ejs/explicit-unescape.yaml",
-      "original_id": "template-explicit-unescape",
-      "id": "local.javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/ejs/var-in-href.yaml",
-      "original_id": "var-in-href",
-      "id": "local.javascript.express.security.audit.xss.ejs.var-in-href.var-in-href"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/ejs/var-in-script-src.yaml",
-      "original_id": "var-in-script-src",
-      "id": "local.javascript.express.security.audit.xss.ejs.var-in-script-src.var-in-script-src"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/ejs/var-in-script-tag.yaml",
-      "original_id": "var-in-script-tag",
-      "id": "local.javascript.express.security.audit.xss.ejs.var-in-script-tag.var-in-script-tag"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/mustache/escape-function-overwrite.yaml",
-      "original_id": "escape-function-overwrite",
-      "id": "local.javascript.express.security.audit.xss.mustache.escape-function-overwrite.escape-function-overwrite"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/mustache/explicit-unescape.yaml",
-      "original_id": "template-explicit-unescape",
-      "id": "local.javascript.express.security.audit.xss.mustache.explicit-unescape.template-explicit-unescape"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/mustache/var-in-script-tag.yaml",
-      "original_id": "var-in-script-tag",
-      "id": "local.javascript.express.security.audit.xss.mustache.var-in-script-tag.var-in-script-tag"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/pug/and-attributes.yaml",
-      "original_id": "template-and-attributes",
-      "id": "local.javascript.express.security.audit.xss.pug.and-attributes.template-and-attributes"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/pug/explicit-unescape.yaml",
-      "original_id": "template-explicit-unescape",
-      "id": "local.javascript.express.security.audit.xss.pug.explicit-unescape.template-explicit-unescape"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/pug/var-in-href.yaml",
-      "original_id": "var-in-href",
-      "id": "local.javascript.express.security.audit.xss.pug.var-in-href.var-in-href"
-    },
-    {
-      "path": "javascript/express/security/audit/xss/pug/var-in-script-tag.yaml",
-      "original_id": "var-in-script-tag",
-      "id": "local.javascript.express.security.audit.xss.pug.var-in-script-tag.var-in-script-tag"
-    },
-    {
-      "path": "javascript/express/security/cors-misconfiguration.yaml",
-      "original_id": "cors-misconfiguration",
-      "id": "local.javascript.express.security.cors-misconfiguration.cors-misconfiguration"
-    },
-    {
-      "path": "javascript/express/security/express-data-exfiltration.yaml",
-      "original_id": "express-data-exfiltration",
-      "id": "local.javascript.express.security.express-data-exfiltration.express-data-exfiltration"
-    },
-    {
-      "path": "javascript/express/security/express-expat-xxe.yaml",
-      "original_id": "express-expat-xxe",
-      "id": "local.javascript.express.security.express-expat-xxe.express-expat-xxe"
-    },
-    {
-      "path": "javascript/express/security/express-insecure-template-usage.yaml",
-      "original_id": "express-insecure-template-usage",
-      "id": "local.javascript.express.security.express-insecure-template-usage.express-insecure-template-usage"
-    },
-    {
-      "path": "javascript/express/security/express-jwt-hardcoded-secret.yaml",
-      "original_id": "express-jwt-hardcoded-secret",
-      "id": "local.javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret"
-    },
-    {
-      "path": "javascript/express/security/express-phantom-injection.yaml",
-      "original_id": "express-phantom-injection",
-      "id": "local.javascript.express.security.express-phantom-injection.express-phantom-injection"
-    },
-    {
-      "path": "javascript/express/security/express-puppeteer-injection.yaml",
-      "original_id": "express-puppeteer-injection",
-      "id": "local.javascript.express.security.express-puppeteer-injection.express-puppeteer-injection"
-    },
-    {
-      "path": "javascript/express/security/express-sandbox-injection.yaml",
-      "original_id": "express-sandbox-code-injection",
-      "id": "local.javascript.express.security.express-sandbox-injection.express-sandbox-code-injection"
-    },
-    {
-      "path": "javascript/express/security/express-vm-injection.yaml",
-      "original_id": "express-vm-injection",
-      "id": "local.javascript.express.security.express-vm-injection.express-vm-injection"
-    },
-    {
-      "path": "javascript/express/security/express-vm2-injection.yaml",
-      "original_id": "express-vm2-injection",
-      "id": "local.javascript.express.security.express-vm2-injection.express-vm2-injection"
-    },
-    {
-      "path": "javascript/express/security/express-wkhtml-injection.yaml",
-      "original_id": "express-wkhtmltoimage-injection",
-      "id": "local.javascript.express.security.express-wkhtml-injection.express-wkhtmltoimage-injection"
-    },
-    {
-      "path": "javascript/express/security/express-wkhtml-injection.yaml",
-      "original_id": "express-wkhtmltopdf-injection",
-      "id": "local.javascript.express.security.express-wkhtml-injection.express-wkhtmltopdf-injection"
-    },
-    {
-      "path": "javascript/express/security/express-xml2json-xxe.yaml",
-      "original_id": "express-xml2json-xxe",
-      "id": "local.javascript.express.security.express-xml2json-xxe.express-xml2json-xxe"
-    },
-    {
-      "path": "javascript/express/security/injection/raw-html-format.yaml",
-      "original_id": "raw-html-format",
-      "id": "local.javascript.express.security.injection.raw-html-format.raw-html-format"
-    },
-    {
-      "path": "javascript/express/security/injection/tainted-sql-string.yaml",
-      "original_id": "tainted-sql-string",
-      "id": "local.javascript.express.security.injection.tainted-sql-string.tainted-sql-string"
-    },
-    {
-      "path": "javascript/express/security/require-request.yaml",
-      "original_id": "require-request",
-      "id": "local.javascript.express.security.require-request.require-request"
-    },
-    {
-      "path": "javascript/express/security/x-frame-options-misconfiguration.yaml",
-      "original_id": "x-frame-options-misconfiguration",
-      "id": "local.javascript.express.security.x-frame-options-misconfiguration.x-frame-options-misconfiguration"
-    },
-    {
-      "path": "javascript/fbjs/security/audit/insecure-createnodesfrommarkup.yaml",
-      "original_id": "insecure-createnodesfrommarkup",
-      "id": "local.javascript.fbjs.security.audit.insecure-createnodesfrommarkup.insecure-createnodesfrommarkup"
-    },
-    {
-      "path": "javascript/grpc/security/grpc-nodejs-insecure-connection.yaml",
-      "original_id": "grpc-nodejs-insecure-connection",
-      "id": "local.javascript.grpc.security.grpc-nodejs-insecure-connection.grpc-nodejs-insecure-connection"
-    },
-    {
-      "path": "javascript/intercom/security/audit/intercom-settings-user-identifier-without-user-hash.yaml",
-      "original_id": "intercom-settings-user-identifier-without-user-hash",
-      "id": "local.javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash"
-    },
-    {
-      "path": "javascript/jose/security/audit/jose-exposed-data.yaml",
-      "original_id": "jose-exposed-data",
-      "id": "local.javascript.jose.security.audit.jose-exposed-data.jose-exposed-data"
-    },
-    {
-      "path": "javascript/jose/security/jwt-hardcode.yaml",
-      "original_id": "hardcoded-jwt-secret",
-      "id": "local.javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret"
-    },
-    {
-      "path": "javascript/jose/security/jwt-none-alg.yaml",
-      "original_id": "jwt-none-alg",
-      "id": "local.javascript.jose.security.jwt-none-alg.jwt-none-alg"
-    },
-    {
-      "path": "javascript/jquery/security/audit/jquery-insecure-method.yaml",
-      "original_id": "jquery-insecure-method",
-      "id": "local.javascript.jquery.security.audit.jquery-insecure-method.jquery-insecure-method"
-    },
-    {
-      "path": "javascript/jquery/security/audit/jquery-insecure-selector.yaml",
-      "original_id": "jquery-insecure-selector",
-      "id": "local.javascript.jquery.security.audit.jquery-insecure-selector.jquery-insecure-selector"
-    },
-    {
-      "path": "javascript/jquery/security/audit/prohibit-jquery-html.yaml",
-      "original_id": "prohibit-jquery-html",
-      "id": "local.javascript.jquery.security.audit.prohibit-jquery-html.prohibit-jquery-html"
-    },
-    {
-      "path": "javascript/jsonwebtoken/security/audit/jwt-decode-without-verify.yaml",
-      "original_id": "jwt-decode-without-verify",
-      "id": "local.javascript.jsonwebtoken.security.audit.jwt-decode-without-verify.jwt-decode-without-verify"
-    },
-    {
-      "path": "javascript/jsonwebtoken/security/audit/jwt-exposed-data.yaml",
-      "original_id": "jwt-exposed-data",
-      "id": "local.javascript.jsonwebtoken.security.audit.jwt-exposed-data.jwt-exposed-data"
-    },
-    {
-      "path": "javascript/jsonwebtoken/security/jwt-hardcode.yaml",
-      "original_id": "hardcoded-jwt-secret",
-      "id": "local.javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret"
-    },
-    {
-      "path": "javascript/jsonwebtoken/security/jwt-none-alg.yaml",
-      "original_id": "jwt-none-alg",
-      "id": "local.javascript.jsonwebtoken.security.jwt-none-alg.jwt-none-alg"
-    },
-    {
-      "path": "javascript/jwt-simple/security/jwt-simple-noverify.yaml",
-      "original_id": "jwt-simple-noverify",
-      "id": "local.javascript.jwt-simple.security.jwt-simple-noverify.jwt-simple-noverify"
-    },
-    {
-      "path": "javascript/lang/security/audit/code-string-concat.yaml",
-      "original_id": "code-string-concat",
-      "id": "local.javascript.lang.security.audit.code-string-concat.code-string-concat"
-    },
-    {
-      "path": "javascript/lang/security/audit/dangerous-spawn-shell.yaml",
-      "original_id": "dangerous-spawn-shell",
-      "id": "local.javascript.lang.security.audit.dangerous-spawn-shell.dangerous-spawn-shell"
-    },
-    {
-      "path": "javascript/lang/security/audit/detect-non-literal-fs-filename.yaml",
-      "original_id": "detect-non-literal-fs-filename",
-      "id": "local.javascript.lang.security.audit.detect-non-literal-fs-filename.detect-non-literal-fs-filename"
-    },
-    {
-      "path": "javascript/lang/security/audit/detect-non-literal-regexp.yaml",
-      "original_id": "detect-non-literal-regexp",
-      "id": "local.javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp"
-    },
-    {
-      "path": "javascript/lang/security/audit/detect-non-literal-require.yaml",
-      "original_id": "detect-non-literal-require",
-      "id": "local.javascript.lang.security.audit.detect-non-literal-require.detect-non-literal-require"
-    },
-    {
-      "path": "javascript/lang/security/audit/detect-redos.yaml",
-      "original_id": "detect-redos",
-      "id": "local.javascript.lang.security.audit.detect-redos.detect-redos"
-    },
-    {
-      "path": "javascript/lang/security/audit/hardcoded-hmac-key.yaml",
-      "original_id": "hardcoded-hmac-key",
-      "id": "local.javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key"
-    },
-    {
-      "path": "javascript/lang/security/audit/incomplete-sanitization.yaml",
-      "original_id": "incomplete-sanitization",
-      "id": "local.javascript.lang.security.audit.incomplete-sanitization.incomplete-sanitization"
-    },
-    {
-      "path": "javascript/lang/security/audit/md5-used-as-password.yaml",
-      "original_id": "md5-used-as-password",
-      "id": "local.javascript.lang.security.audit.md5-used-as-password.md5-used-as-password"
-    },
-    {
-      "path": "javascript/lang/security/audit/path-traversal/path-join-resolve-traversal.yaml",
-      "original_id": "path-join-resolve-traversal",
-      "id": "local.javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal"
-    },
-    {
-      "path": "javascript/lang/security/audit/prototype-pollution/prototype-pollution-assignment.yaml",
-      "original_id": "prototype-pollution-assignment",
-      "id": "local.javascript.lang.security.audit.prototype-pollution.prototype-pollution-assignment.prototype-pollution-assignment"
-    },
-    {
-      "path": "javascript/lang/security/audit/prototype-pollution/prototype-pollution-loop.yaml",
-      "original_id": "prototype-pollution-loop",
-      "id": "local.javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop"
-    },
-    {
-      "path": "javascript/lang/security/audit/spawn-shell-true.yaml",
-      "original_id": "spawn-shell-true",
-      "id": "local.javascript.lang.security.audit.spawn-shell-true.spawn-shell-true"
-    },
-    {
-      "path": "javascript/lang/security/audit/sqli/node-knex-sqli.yaml",
-      "original_id": "node-knex-sqli",
-      "id": "local.javascript.lang.security.audit.sqli.node-knex-sqli.node-knex-sqli"
-    },
-    {
-      "path": "javascript/lang/security/audit/sqli/node-mssql-sqli.yaml",
-      "original_id": "node-mssql-sqli",
-      "id": "local.javascript.lang.security.audit.sqli.node-mssql-sqli.node-mssql-sqli"
-    },
-    {
-      "path": "javascript/lang/security/audit/sqli/node-mysql-sqli.yaml",
-      "original_id": "node-mysql-sqli",
-      "id": "local.javascript.lang.security.audit.sqli.node-mysql-sqli.node-mysql-sqli"
-    },
-    {
-      "path": "javascript/lang/security/audit/sqli/node-postgres-sqli.yaml",
-      "original_id": "node-postgres-sqli",
-      "id": "local.javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli"
-    },
-    {
-      "path": "javascript/lang/security/audit/unknown-value-with-script-tag.yaml",
-      "original_id": "unknown-value-with-script-tag",
-      "id": "local.javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag"
-    },
-    {
-      "path": "javascript/lang/security/audit/unsafe-dynamic-method.yaml",
-      "original_id": "unsafe-dynamic-method",
-      "id": "local.javascript.lang.security.audit.unsafe-dynamic-method.unsafe-dynamic-method"
-    },
-    {
-      "path": "javascript/lang/security/audit/unsafe-formatstring.yaml",
-      "original_id": "unsafe-formatstring",
-      "id": "local.javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring"
-    },
-    {
-      "path": "javascript/lang/security/detect-buffer-noassert.yaml",
-      "original_id": "detect-buffer-noassert",
-      "id": "local.javascript.lang.security.detect-buffer-noassert.detect-buffer-noassert"
-    },
-    {
-      "path": "javascript/lang/security/detect-child-process.yaml",
-      "original_id": "detect-child-process",
-      "id": "local.javascript.lang.security.detect-child-process.detect-child-process"
-    },
-    {
-      "path": "javascript/lang/security/detect-disable-mustache-escape.yaml",
-      "original_id": "detect-disable-mustache-escape",
-      "id": "local.javascript.lang.security.detect-disable-mustache-escape.detect-disable-mustache-escape"
-    },
-    {
-      "path": "javascript/lang/security/detect-eval-with-expression.yaml",
-      "original_id": "detect-eval-with-expression",
-      "id": "local.javascript.lang.security.detect-eval-with-expression.detect-eval-with-expression"
-    },
-    {
-      "path": "javascript/lang/security/detect-insecure-websocket.yaml",
-      "original_id": "detect-insecure-websocket",
-      "id": "local.javascript.lang.security.detect-insecure-websocket.detect-insecure-websocket"
-    },
-    {
-      "path": "javascript/lang/security/detect-no-csrf-before-method-override.yaml",
-      "original_id": "detect-no-csrf-before-method-override",
-      "id": "local.javascript.lang.security.detect-no-csrf-before-method-override.detect-no-csrf-before-method-override"
-    },
-    {
-      "path": "javascript/lang/security/detect-pseudoRandomBytes.yaml",
-      "original_id": "detect-pseudoRandomBytes",
-      "id": "local.javascript.lang.security.detect-pseudoRandomBytes.detect-pseudoRandomBytes"
-    },
-    {
-      "path": "javascript/lang/security/html-in-template-string.yaml",
-      "original_id": "html-in-template-string",
-      "id": "local.javascript.lang.security.html-in-template-string.html-in-template-string"
-    },
-    {
-      "path": "javascript/lang/security/insecure-object-assign.yaml",
-      "original_id": "insecure-object-assign",
-      "id": "local.javascript.lang.security.insecure-object-assign.insecure-object-assign"
-    },
-    {
-      "path": "javascript/lang/security/spawn-git-clone.yaml",
-      "original_id": "spawn-git-clone",
-      "id": "local.javascript.lang.security.spawn-git-clone.spawn-git-clone"
-    },
-    {
-      "path": "javascript/monaco-editor/security/audit/monaco-hover-htmlsupport.yaml",
-      "original_id": "monaco-hover-htmlsupport",
-      "id": "local.javascript.monaco-editor.security.audit.monaco-hover-htmlsupport.monaco-hover-htmlsupport"
-    },
-    {
-      "path": "javascript/node-crypto/security/aead-no-final.yaml",
-      "original_id": "aead-no-final",
-      "id": "local.javascript.node-crypto.security.aead-no-final.aead-no-final"
-    },
-    {
-      "path": "javascript/node-crypto/security/create-de-cipher-no-iv.yaml",
-      "original_id": "create-de-cipher-no-iv",
-      "id": "local.javascript.node-crypto.security.create-de-cipher-no-iv.create-de-cipher-no-iv"
-    },
-    {
-      "path": "javascript/node-crypto/security/gcm-no-tag-length.yaml",
-      "original_id": "gcm-no-tag-length",
-      "id": "local.javascript.node-crypto.security.gcm-no-tag-length.gcm-no-tag-length"
-    },
-    {
-      "path": "javascript/node-expat/security/audit/expat-xxe.yaml",
-      "original_id": "expat-xxe",
-      "id": "local.javascript.node-expat.security.audit.expat-xxe.expat-xxe"
-    },
-    {
-      "path": "javascript/passport-jwt/security/passport-hardcode.yaml",
-      "original_id": "hardcoded-passport-secret",
-      "id": "local.javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret"
-    },
-    {
-      "path": "javascript/phantom/security/audit/phantom-injection.yaml",
-      "original_id": "phantom-injection",
-      "id": "local.javascript.phantom.security.audit.phantom-injection.phantom-injection"
-    },
-    {
-      "path": "javascript/playwright/security/audit/playwright-addinitscript-code-injection.yaml",
-      "original_id": "playwright-addinitscript-code-injection",
-      "id": "local.javascript.playwright.security.audit.playwright-addinitscript-code-injection.playwright-addinitscript-code-injection"
-    },
-    {
-      "path": "javascript/playwright/security/audit/playwright-evaluate-arg-injection.yaml",
-      "original_id": "playwright-evaluate-arg-injection",
-      "id": "local.javascript.playwright.security.audit.playwright-evaluate-arg-injection.playwright-evaluate-arg-injection"
-    },
-    {
-      "path": "javascript/playwright/security/audit/playwright-evaluate-code-injection.yaml",
-      "original_id": "playwright-evaluate-code-injection",
-      "id": "local.javascript.playwright.security.audit.playwright-evaluate-code-injection.playwright-evaluate-code-injection"
-    },
-    {
-      "path": "javascript/playwright/security/audit/playwright-exposed-chrome-devtools.yaml",
-      "original_id": "playwright-exposed-chrome-devtools",
-      "id": "local.javascript.playwright.security.audit.playwright-exposed-chrome-devtools.playwright-exposed-chrome-devtools"
-    },
-    {
-      "path": "javascript/playwright/security/audit/playwright-goto-injection.yaml",
-      "original_id": "playwright-goto-injection",
-      "id": "local.javascript.playwright.security.audit.playwright-goto-injection.playwright-goto-injection"
-    },
-    {
-      "path": "javascript/playwright/security/audit/playwright-setcontent-injection.yaml",
-      "original_id": "playwright-setcontent-injection",
-      "id": "local.javascript.playwright.security.audit.playwright-setcontent-injection.playwright-setcontent-injection"
-    },
-    {
-      "path": "javascript/puppeteer/security/audit/puppeteer-evaluate-arg-injection.yaml",
-      "original_id": "puppeteer-evaluate-arg-injection",
-      "id": "local.javascript.puppeteer.security.audit.puppeteer-evaluate-arg-injection.puppeteer-evaluate-arg-injection"
-    },
-    {
-      "path": "javascript/puppeteer/security/audit/puppeteer-evaluate-code-injection.yaml",
-      "original_id": "puppeteer-evaluate-code-injection",
-      "id": "local.javascript.puppeteer.security.audit.puppeteer-evaluate-code-injection.puppeteer-evaluate-code-injection"
-    },
-    {
-      "path": "javascript/puppeteer/security/audit/puppeteer-exposed-chrome-devtools.yaml",
-      "original_id": "puppeteer-exposed-chrome-devtools",
-      "id": "local.javascript.puppeteer.security.audit.puppeteer-exposed-chrome-devtools.puppeteer-exposed-chrome-devtools"
-    },
-    {
-      "path": "javascript/puppeteer/security/audit/puppeteer-goto-injection.yaml",
-      "original_id": "puppeteer-goto-injection",
-      "id": "local.javascript.puppeteer.security.audit.puppeteer-goto-injection.puppeteer-goto-injection"
-    },
-    {
-      "path": "javascript/puppeteer/security/audit/puppeteer-setcontent-injection.yaml",
-      "original_id": "puppeteer-setcontent-injection",
-      "id": "local.javascript.puppeteer.security.audit.puppeteer-setcontent-injection.puppeteer-setcontent-injection"
-    },
-    {
-      "path": "javascript/sandbox/security/audit/sandbox-code-injection.yaml",
-      "original_id": "sandbox-code-injection",
-      "id": "local.javascript.sandbox.security.audit.sandbox-code-injection.sandbox-code-injection"
-    },
-    {
-      "path": "javascript/sax/security/audit/sax-xxe.yaml",
-      "original_id": "sax-xxe",
-      "id": "local.javascript.sax.security.audit.sax-xxe.sax-xxe"
-    },
-    {
-      "path": "javascript/sequelize/security/audit/sequelize-enforce-tls.yaml",
-      "original_id": "sequelize-enforce-tls",
-      "id": "local.javascript.sequelize.security.audit.sequelize-enforce-tls.sequelize-enforce-tls"
-    },
-    {
-      "path": "javascript/sequelize/security/audit/sequelize-injection-express.yaml",
-      "original_id": "express-sequelize-injection",
-      "id": "local.javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection"
-    },
-    {
-      "path": "javascript/sequelize/security/audit/sequelize-raw-query.yaml",
-      "original_id": "sequelize-raw-query",
-      "id": "local.javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query"
-    },
-    {
-      "path": "javascript/sequelize/security/audit/sequelize-tls-disabled-cert-validation.yaml",
-      "original_id": "sequelize-tls-disabled-cert-validation",
-      "id": "local.javascript.sequelize.security.audit.sequelize-tls-disabled-cert-validation.sequelize-tls-disabled-cert-validation"
-    },
-    {
-      "path": "javascript/sequelize/security/audit/sequelize-weak-tls-version.yaml",
-      "original_id": "sequelize-weak-tls-version",
-      "id": "local.javascript.sequelize.security.audit.sequelize-weak-tls-version.sequelize-weak-tls-version"
-    },
-    {
-      "path": "javascript/serialize-javascript/security/audit/unsafe-serialize-javascript.yaml",
-      "original_id": "unsafe-serialize-javascript",
-      "id": "local.javascript.serialize-javascript.security.audit.unsafe-serialize-javascript.unsafe-serialize-javascript"
-    },
-    {
-      "path": "javascript/shelljs/security/shelljs-exec-injection.yaml",
-      "original_id": "shelljs-exec-injection",
-      "id": "local.javascript.shelljs.security.shelljs-exec-injection.shelljs-exec-injection"
-    },
-    {
-      "path": "javascript/thenify/security/audit/multiargs-code-execution.yaml",
-      "original_id": "multiargs-code-execution",
-      "id": "local.javascript.thenify.security.audit.multiargs-code-execution.multiargs-code-execution"
-    },
-    {
-      "path": "javascript/vm2/security/audit/vm2-code-injection.yaml",
-      "original_id": "vm2-code-injection",
-      "id": "local.javascript.vm2.security.audit.vm2-code-injection.vm2-code-injection"
-    },
-    {
-      "path": "javascript/vm2/security/audit/vm2-context-injection.yaml",
-      "original_id": "vm2-context-injection",
-      "id": "local.javascript.vm2.security.audit.vm2-context-injection.vm2-context-injection"
-    },
-    {
-      "path": "javascript/vue/security/audit/xss/templates/avoid-v-html.yaml",
-      "original_id": "avoid-v-html",
-      "id": "local.javascript.vue.security.audit.xss.templates.avoid-v-html.avoid-v-html"
-    },
-    {
-      "path": "javascript/wkhtmltoimage/security/audit/wkhtmltoimage-injection.yaml",
-      "original_id": "wkhtmltoimage-injection",
-      "id": "local.javascript.wkhtmltoimage.security.audit.wkhtmltoimage-injection.wkhtmltoimage-injection"
-    },
-    {
-      "path": "javascript/wkhtmltopdf/security/audit/wkhtmltopdf-injection.yaml",
-      "original_id": "wkhtmltopdf-injection",
-      "id": "local.javascript.wkhtmltopdf.security.audit.wkhtmltopdf-injection.wkhtmltopdf-injection"
-    },
-    {
-      "path": "javascript/xml2json/security/audit/xml2json-xxe.yaml",
-      "original_id": "xml2json-xxe",
-      "id": "local.javascript.xml2json.security.audit.xml2json-xxe.xml2json-xxe"
-    },
-    {
-      "path": "typescript/angular/security/audit/angular-domsanitizer.yaml",
-      "original_id": "angular-bypasssecuritytrust",
-      "id": "local.typescript.angular.security.audit.angular-domsanitizer.angular-bypasssecuritytrust"
-    },
-    {
-      "path": "typescript/lang/security/audit/cors-regex-wildcard.yaml",
-      "original_id": "cors-regex-wildcard",
-      "id": "local.typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard"
-    },
-    {
-      "path": "typescript/mcp/security/mcp-command-injection-typescript.yaml",
-      "original_id": "mcp-command-injection-typescript",
-      "id": "local.typescript.mcp.security.mcp-command-injection-typescript.mcp-command-injection-typescript"
-    },
-    {
-      "path": "typescript/mcp/security/mcp-ssrf-typescript.yaml",
-      "original_id": "mcp-ssrf-typescript",
-      "id": "local.typescript.mcp.security.mcp-ssrf-typescript.mcp-ssrf-typescript"
-    },
-    {
-      "path": "typescript/nestjs/security/audit/nestjs-header-cors-any.yaml",
-      "original_id": "nestjs-header-cors-any",
-      "id": "local.typescript.nestjs.security.audit.nestjs-header-cors-any.nestjs-header-cors-any"
-    },
-    {
-      "path": "typescript/nestjs/security/audit/nestjs-header-xss-disabled.yaml",
-      "original_id": "nestjs-header-xss-disabled",
-      "id": "local.typescript.nestjs.security.audit.nestjs-header-xss-disabled.nestjs-header-xss-disabled"
-    },
-    {
-      "path": "typescript/nestjs/security/audit/nestjs-open-redirect.yaml",
-      "original_id": "nestjs-open-redirect",
-      "id": "local.typescript.nestjs.security.audit.nestjs-open-redirect.nestjs-open-redirect"
-    },
-    {
-      "path": "typescript/react/security/audit/react-dangerouslysetinnerhtml.yaml",
-      "original_id": "react-dangerouslysetinnerhtml",
-      "id": "local.typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml"
-    },
-    {
-      "path": "typescript/react/security/audit/react-href-var.yaml",
-      "original_id": "react-href-var",
-      "id": "local.typescript.react.security.audit.react-href-var.react-href-var"
-    },
-    {
-      "path": "typescript/react/security/audit/react-jwt-decoded-property.yaml",
-      "original_id": "react-jwt-decoded-property",
-      "id": "local.typescript.react.security.audit.react-jwt-decoded-property.react-jwt-decoded-property"
-    },
-    {
-      "path": "typescript/react/security/audit/react-jwt-in-localstorage.yaml",
-      "original_id": "react-jwt-in-localstorage",
-      "id": "local.typescript.react.security.audit.react-jwt-in-localstorage.react-jwt-in-localstorage"
-    },
-    {
-      "path": "typescript/react/security/audit/react-unsanitized-method.yaml",
-      "original_id": "react-unsanitized-method",
-      "id": "local.typescript.react.security.audit.react-unsanitized-method.react-unsanitized-method"
-    },
-    {
-      "path": "typescript/react/security/audit/react-unsanitized-property.yaml",
-      "original_id": "react-unsanitized-property",
-      "id": "local.typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property"
-    },
-    {
-      "path": "typescript/react/security/react-insecure-request.yaml",
-      "original_id": "react-insecure-request",
-      "id": "local.typescript.react.security.react-insecure-request.react-insecure-request"
-    },
-    {
-      "path": "typescript/react/security/react-markdown-insecure-html.yaml",
-      "original_id": "react-markdown-insecure-html",
-      "id": "local.typescript.react.security.react-markdown-insecure-html.react-markdown-insecure-html"
-    },
-    {
-      "path": "yaml/github-actions/security/allowed-unsecure-commands.yaml",
-      "original_id": "allowed-unsecure-commands",
-      "id": "local.yaml.github-actions.security.allowed-unsecure-commands.allowed-unsecure-commands"
-    },
-    {
-      "path": "yaml/github-actions/security/audit/unsafe-add-mask-workflow-command.yaml",
-      "original_id": "unsafe-add-mask-workflow-command",
-      "id": "local.yaml.github-actions.security.audit.unsafe-add-mask-workflow-command.unsafe-add-mask-workflow-command"
-    },
-    {
-      "path": "yaml/github-actions/security/curl-eval.yaml",
-      "original_id": "curl-eval",
-      "id": "local.yaml.github-actions.security.curl-eval.curl-eval"
-    },
-    {
-      "path": "yaml/github-actions/security/detect-shai-hulud-backdoor.yaml",
-      "original_id": "detect-shai-hulud-backdoor",
-      "id": "local.yaml.github-actions.security.detect-shai-hulud-backdoor.detect-shai-hulud-backdoor"
-    },
-    {
-      "path": "yaml/github-actions/security/gha-curl-pipe-shell.yaml",
-      "original_id": "gha-curl-pipe-shell",
-      "id": "local.yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell"
-    },
-    {
-      "path": "yaml/github-actions/security/gha-workflow-env-secret.yaml",
-      "original_id": "gha-workflow-env-secret",
-      "id": "local.yaml.github-actions.security.gha-workflow-env-secret.gha-workflow-env-secret"
-    },
-    {
-      "path": "yaml/github-actions/security/github-actions-mutable-action-tag.yaml",
-      "original_id": "github-actions-mutable-action-tag",
-      "id": "local.yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag"
-    },
-    {
-      "path": "yaml/github-actions/security/github-script-injection.yaml",
-      "original_id": "github-script-injection",
-      "id": "local.yaml.github-actions.security.github-script-injection.github-script-injection"
-    },
-    {
-      "path": "yaml/github-actions/security/pull-request-target-code-checkout.yaml",
-      "original_id": "pull-request-target-code-checkout",
-      "id": "local.yaml.github-actions.security.pull-request-target-code-checkout.pull-request-target-code-checkout"
-    },
-    {
-      "path": "yaml/github-actions/security/run-shell-injection.yaml",
-      "original_id": "run-shell-injection",
-      "id": "local.yaml.github-actions.security.run-shell-injection.run-shell-injection"
-    },
-    {
-      "path": "yaml/github-actions/security/secrets-inherit.yaml",
-      "original_id": "secrets-inherit",
-      "id": "local.yaml.github-actions.security.secrets-inherit.secrets-inherit"
-    },
-    {
-      "path": "yaml/github-actions/security/workflow-run-target-code-checkout.yaml",
-      "original_id": "workflow-run-target-code-checkout",
-      "id": "local.yaml.github-actions.security.workflow-run-target-code-checkout.workflow-run-target-code-checkout"
-    }
-  ],
-  "rule_count": 196,
-  "serializer": "PyYAML 6.0.3 safe_dump(sort_keys=False)",
-  "license_url": "https://semgrep.dev/legal/rules-license/",
-  "license_sha256": "1a6466ae5f1c68631bbd13e3f1aa8f380d84219853c08f0456b853fccfacee1d"
+    "source": "https://github.com/semgrep/semgrep-rules",
+    "commit": "a5ad1714f00c9f7fde980cab0ea1d6dc6d414fd2",
+    "selection": [
+        "javascript",
+        "typescript",
+        "yaml/github-actions"
+    ],
+    "category": "security",
+    "modes": [
+        "search",
+        "taint"
+    ],
+    "rules": 196,
+    "config_sha256": "da388503c6694eb209146d3ac991a6ae967ed00d99e4d5b3d44670f3cafb9b2a",
+    "provenance": [
+        {
+            "path": "javascript/ajv/security/audit/ajv-allerrors-true.yaml",
+            "original_id": "ajv-allerrors-true",
+            "id": "local.javascript.ajv.security.audit.ajv-allerrors-true.ajv-allerrors-true"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-element-methods.yaml",
+            "original_id": "detect-angular-element-methods",
+            "id": "local.javascript.angular.security.detect-angular-element-methods.detect-angular-element-methods"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-element-taint.yaml",
+            "original_id": "detect-angular-element-taint",
+            "id": "local.javascript.angular.security.detect-angular-element-taint.detect-angular-element-taint"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-open-redirect.yaml",
+            "original_id": "detect-angular-open-redirect",
+            "id": "local.javascript.angular.security.detect-angular-open-redirect.detect-angular-open-redirect"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-resource-loading.yaml",
+            "original_id": "detect-angular-resource-loading",
+            "id": "local.javascript.angular.security.detect-angular-resource-loading.detect-angular-resource-loading"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-sce-disabled.yaml",
+            "original_id": "detect-angular-sce-disabled",
+            "id": "local.javascript.angular.security.detect-angular-sce-disabled.detect-angular-sce-disabled"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-trust-as-css.yaml",
+            "original_id": "detect-angular-trust-as-css-method",
+            "id": "local.javascript.angular.security.detect-angular-trust-as-css.detect-angular-trust-as-css-method"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-trust-as-html-method.yaml",
+            "original_id": "detect-angular-trust-as-html-method",
+            "id": "local.javascript.angular.security.detect-angular-trust-as-html-method.detect-angular-trust-as-html-method"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-trust-as-js-method.yaml",
+            "original_id": "detect-angular-trust-as-js-method",
+            "id": "local.javascript.angular.security.detect-angular-trust-as-js-method.detect-angular-trust-as-js-method"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-trust-as-method.yaml",
+            "original_id": "detect-angular-trust-as-method",
+            "id": "local.javascript.angular.security.detect-angular-trust-as-method.detect-angular-trust-as-method"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-trust-as-resourceurl-method.yaml",
+            "original_id": "detect-angular-trust-as-resourceurl-method",
+            "id": "local.javascript.angular.security.detect-angular-trust-as-resourceurl-method.detect-angular-trust-as-resourceurl-method"
+        },
+        {
+            "path": "javascript/angular/security/detect-angular-trust-as-url-method.yaml",
+            "original_id": "detect-angular-trust-as-url-method",
+            "id": "local.javascript.angular.security.detect-angular-trust-as-url-method.detect-angular-trust-as-url-method"
+        },
+        {
+            "path": "javascript/angular/security/detect-third-party-angular-translate.yaml",
+            "original_id": "detect-angular-translateprovider-translations-method",
+            "id": "local.javascript.angular.security.detect-third-party-angular-translate.detect-angular-translateprovider-translations-method"
+        },
+        {
+            "path": "javascript/apollo/security/apollo-axios-ssrf.yaml",
+            "original_id": "apollo-axios-ssrf",
+            "id": "local.javascript.apollo.security.apollo-axios-ssrf.apollo-axios-ssrf"
+        },
+        {
+            "path": "javascript/argon2/security/unsafe-argon2-config.yaml",
+            "original_id": "unsafe-argon2-config",
+            "id": "local.javascript.argon2.security.unsafe-argon2-config.unsafe-argon2-config"
+        },
+        {
+            "path": "javascript/audit/detect-replaceall-sanitization.yaml",
+            "original_id": "detect-replaceall-sanitization",
+            "id": "local.javascript.audit.detect-replaceall-sanitization.detect-replaceall-sanitization"
+        },
+        {
+            "path": "javascript/aws-lambda/security/detect-child-process.yaml",
+            "original_id": "detect-child-process",
+            "id": "local.javascript.aws-lambda.security.detect-child-process.detect-child-process"
+        },
+        {
+            "path": "javascript/aws-lambda/security/dynamodb-request-object.yaml",
+            "original_id": "dynamodb-request-object",
+            "id": "local.javascript.aws-lambda.security.dynamodb-request-object.dynamodb-request-object"
+        },
+        {
+            "path": "javascript/aws-lambda/security/knex-sqli.yaml",
+            "original_id": "knex-sqli",
+            "id": "local.javascript.aws-lambda.security.knex-sqli.knex-sqli"
+        },
+        {
+            "path": "javascript/aws-lambda/security/mysql-sqli.yaml",
+            "original_id": "mysql-sqli",
+            "id": "local.javascript.aws-lambda.security.mysql-sqli.mysql-sqli"
+        },
+        {
+            "path": "javascript/aws-lambda/security/pg-sqli.yaml",
+            "original_id": "pg-sqli",
+            "id": "local.javascript.aws-lambda.security.pg-sqli.pg-sqli"
+        },
+        {
+            "path": "javascript/aws-lambda/security/sequelize-sqli.yaml",
+            "original_id": "sequelize-sqli",
+            "id": "local.javascript.aws-lambda.security.sequelize-sqli.sequelize-sqli"
+        },
+        {
+            "path": "javascript/aws-lambda/security/tainted-eval.yaml",
+            "original_id": "tainted-eval",
+            "id": "local.javascript.aws-lambda.security.tainted-eval.tainted-eval"
+        },
+        {
+            "path": "javascript/aws-lambda/security/tainted-html-response.yaml",
+            "original_id": "tainted-html-response",
+            "id": "local.javascript.aws-lambda.security.tainted-html-response.tainted-html-response"
+        },
+        {
+            "path": "javascript/aws-lambda/security/tainted-html-string.yaml",
+            "original_id": "tainted-html-string",
+            "id": "local.javascript.aws-lambda.security.tainted-html-string.tainted-html-string"
+        },
+        {
+            "path": "javascript/aws-lambda/security/tainted-sql-string.yaml",
+            "original_id": "tainted-sql-string",
+            "id": "local.javascript.aws-lambda.security.tainted-sql-string.tainted-sql-string"
+        },
+        {
+            "path": "javascript/aws-lambda/security/vm-runincontext-injection.yaml",
+            "original_id": "vm-runincontext-injection",
+            "id": "local.javascript.aws-lambda.security.vm-runincontext-injection.vm-runincontext-injection"
+        },
+        {
+            "path": "javascript/bluebird/security/audit/tofastproperties-code-execution.yaml",
+            "original_id": "tofastproperties-code-execution",
+            "id": "local.javascript.bluebird.security.audit.tofastproperties-code-execution.tofastproperties-code-execution"
+        },
+        {
+            "path": "javascript/browser/security/dom-based-xss.yaml",
+            "original_id": "dom-based-xss",
+            "id": "local.javascript.browser.security.dom-based-xss.dom-based-xss"
+        },
+        {
+            "path": "javascript/browser/security/eval-detected.yaml",
+            "original_id": "eval-detected",
+            "id": "local.javascript.browser.security.eval-detected.eval-detected"
+        },
+        {
+            "path": "javascript/browser/security/insecure-document-method.yaml",
+            "original_id": "insecure-document-method",
+            "id": "local.javascript.browser.security.insecure-document-method.insecure-document-method"
+        },
+        {
+            "path": "javascript/browser/security/insecure-innerhtml.yaml",
+            "original_id": "insecure-innerhtml",
+            "id": "local.javascript.browser.security.insecure-innerhtml.insecure-innerhtml"
+        },
+        {
+            "path": "javascript/browser/security/insufficient-postmessage-origin-validation.yaml",
+            "original_id": "insufficient-postmessage-origin-validation",
+            "id": "local.javascript.browser.security.insufficient-postmessage-origin-validation.insufficient-postmessage-origin-validation"
+        },
+        {
+            "path": "javascript/browser/security/open-redirect-from-function.yaml",
+            "original_id": "js-open-redirect-from-function",
+            "id": "local.javascript.browser.security.open-redirect-from-function.js-open-redirect-from-function"
+        },
+        {
+            "path": "javascript/browser/security/open-redirect.yaml",
+            "original_id": "js-open-redirect",
+            "id": "local.javascript.browser.security.open-redirect.js-open-redirect"
+        },
+        {
+            "path": "javascript/browser/security/raw-html-concat.yaml",
+            "original_id": "raw-html-concat",
+            "id": "local.javascript.browser.security.raw-html-concat.raw-html-concat"
+        },
+        {
+            "path": "javascript/browser/security/raw-html-join.yaml",
+            "original_id": "raw-html-join",
+            "id": "local.javascript.browser.security.raw-html-join.raw-html-join"
+        },
+        {
+            "path": "javascript/browser/security/wildcard-postmessage-configuration.yaml",
+            "original_id": "wildcard-postmessage-configuration",
+            "id": "local.javascript.browser.security.wildcard-postmessage-configuration.wildcard-postmessage-configuration"
+        },
+        {
+            "path": "javascript/chrome-remote-interface/security/audit/chrome-remote-interface-compilescript-injection.yaml",
+            "original_id": "chrome-remote-interface-compilescript-injection",
+            "id": "local.javascript.chrome-remote-interface.security.audit.chrome-remote-interface-compilescript-injection.chrome-remote-interface-compilescript-injection"
+        },
+        {
+            "path": "javascript/deno/security/audit/deno-dangerous-run.yaml",
+            "original_id": "deno-dangerous-run",
+            "id": "local.javascript.deno.security.audit.deno-dangerous-run.deno-dangerous-run"
+        },
+        {
+            "path": "javascript/express/security/audit/express-check-csurf-middleware-usage.yaml",
+            "original_id": "express-check-csurf-middleware-usage",
+            "id": "local.javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage"
+        },
+        {
+            "path": "javascript/express/security/audit/express-check-directory-listing.yaml",
+            "original_id": "express-check-directory-listing",
+            "id": "local.javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing"
+        },
+        {
+            "path": "javascript/express/security/audit/express-cookie-settings.yaml",
+            "original_id": "express-cookie-session-default-name",
+            "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-default-name"
+        },
+        {
+            "path": "javascript/express/security/audit/express-cookie-settings.yaml",
+            "original_id": "express-cookie-session-no-secure",
+            "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-secure"
+        },
+        {
+            "path": "javascript/express/security/audit/express-cookie-settings.yaml",
+            "original_id": "express-cookie-session-no-httponly",
+            "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-httponly"
+        },
+        {
+            "path": "javascript/express/security/audit/express-cookie-settings.yaml",
+            "original_id": "express-cookie-session-no-domain",
+            "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-domain"
+        },
+        {
+            "path": "javascript/express/security/audit/express-cookie-settings.yaml",
+            "original_id": "express-cookie-session-no-path",
+            "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-path"
+        },
+        {
+            "path": "javascript/express/security/audit/express-cookie-settings.yaml",
+            "original_id": "express-cookie-session-no-expires",
+            "id": "local.javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-expires"
+        },
+        {
+            "path": "javascript/express/security/audit/express-detect-notevil-usage.yaml",
+            "original_id": "express-detect-notevil-usage",
+            "id": "local.javascript.express.security.audit.express-detect-notevil-usage.express-detect-notevil-usage"
+        },
+        {
+            "path": "javascript/express/security/audit/express-jwt-not-revoked.yaml",
+            "original_id": "express-jwt-not-revoked",
+            "id": "local.javascript.express.security.audit.express-jwt-not-revoked.express-jwt-not-revoked"
+        },
+        {
+            "path": "javascript/express/security/audit/express-libxml-noent.yaml",
+            "original_id": "express-libxml-noent",
+            "id": "local.javascript.express.security.audit.express-libxml-noent.express-libxml-noent"
+        },
+        {
+            "path": "javascript/express/security/audit/express-libxml-vm-noent.yaml",
+            "original_id": "express-libxml-vm-noent",
+            "id": "local.javascript.express.security.audit.express-libxml-vm-noent.express-libxml-vm-noent"
+        },
+        {
+            "path": "javascript/express/security/audit/express-open-redirect.yaml",
+            "original_id": "express-open-redirect",
+            "id": "local.javascript.express.security.audit.express-open-redirect.express-open-redirect"
+        },
+        {
+            "path": "javascript/express/security/audit/express-path-join-resolve-traversal.yaml",
+            "original_id": "express-path-join-resolve-traversal",
+            "id": "local.javascript.express.security.audit.express-path-join-resolve-traversal.express-path-join-resolve-traversal"
+        },
+        {
+            "path": "javascript/express/security/audit/express-res-sendfile.yaml",
+            "original_id": "express-res-sendfile",
+            "id": "local.javascript.express.security.audit.express-res-sendfile.express-res-sendfile"
+        },
+        {
+            "path": "javascript/express/security/audit/express-session-hardcoded-secret.yaml",
+            "original_id": "express-session-hardcoded-secret",
+            "id": "local.javascript.express.security.audit.express-session-hardcoded-secret.express-session-hardcoded-secret"
+        },
+        {
+            "path": "javascript/express/security/audit/express-ssrf.yaml",
+            "original_id": "express-ssrf",
+            "id": "local.javascript.express.security.audit.express-ssrf.express-ssrf"
+        },
+        {
+            "path": "javascript/express/security/audit/express-third-party-object-deserialization.yaml",
+            "original_id": "express-third-party-object-deserialization",
+            "id": "local.javascript.express.security.audit.express-third-party-object-deserialization.express-third-party-object-deserialization"
+        },
+        {
+            "path": "javascript/express/security/audit/express-xml2json-xxe-event.yaml",
+            "original_id": "express-xml2json-xxe-event",
+            "id": "local.javascript.express.security.audit.express-xml2json-xxe-event.express-xml2json-xxe-event"
+        },
+        {
+            "path": "javascript/express/security/audit/possible-user-input-redirect.yaml",
+            "original_id": "unknown-value-in-redirect",
+            "id": "local.javascript.express.security.audit.possible-user-input-redirect.unknown-value-in-redirect"
+        },
+        {
+            "path": "javascript/express/security/audit/remote-property-injection.yaml",
+            "original_id": "remote-property-injection",
+            "id": "local.javascript.express.security.audit.remote-property-injection.remote-property-injection"
+        },
+        {
+            "path": "javascript/express/security/audit/res-render-injection.yaml",
+            "original_id": "res-render-injection",
+            "id": "local.javascript.express.security.audit.res-render-injection.res-render-injection"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/direct-response-write.yaml",
+            "original_id": "direct-response-write",
+            "id": "local.javascript.express.security.audit.xss.direct-response-write.direct-response-write"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/ejs/explicit-unescape.yaml",
+            "original_id": "template-explicit-unescape",
+            "id": "local.javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/ejs/var-in-href.yaml",
+            "original_id": "var-in-href",
+            "id": "local.javascript.express.security.audit.xss.ejs.var-in-href.var-in-href"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/ejs/var-in-script-src.yaml",
+            "original_id": "var-in-script-src",
+            "id": "local.javascript.express.security.audit.xss.ejs.var-in-script-src.var-in-script-src"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/ejs/var-in-script-tag.yaml",
+            "original_id": "var-in-script-tag",
+            "id": "local.javascript.express.security.audit.xss.ejs.var-in-script-tag.var-in-script-tag"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/mustache/escape-function-overwrite.yaml",
+            "original_id": "escape-function-overwrite",
+            "id": "local.javascript.express.security.audit.xss.mustache.escape-function-overwrite.escape-function-overwrite"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/mustache/explicit-unescape.yaml",
+            "original_id": "template-explicit-unescape",
+            "id": "local.javascript.express.security.audit.xss.mustache.explicit-unescape.template-explicit-unescape"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/mustache/var-in-script-tag.yaml",
+            "original_id": "var-in-script-tag",
+            "id": "local.javascript.express.security.audit.xss.mustache.var-in-script-tag.var-in-script-tag"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/pug/and-attributes.yaml",
+            "original_id": "template-and-attributes",
+            "id": "local.javascript.express.security.audit.xss.pug.and-attributes.template-and-attributes"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/pug/explicit-unescape.yaml",
+            "original_id": "template-explicit-unescape",
+            "id": "local.javascript.express.security.audit.xss.pug.explicit-unescape.template-explicit-unescape"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/pug/var-in-href.yaml",
+            "original_id": "var-in-href",
+            "id": "local.javascript.express.security.audit.xss.pug.var-in-href.var-in-href"
+        },
+        {
+            "path": "javascript/express/security/audit/xss/pug/var-in-script-tag.yaml",
+            "original_id": "var-in-script-tag",
+            "id": "local.javascript.express.security.audit.xss.pug.var-in-script-tag.var-in-script-tag"
+        },
+        {
+            "path": "javascript/express/security/cors-misconfiguration.yaml",
+            "original_id": "cors-misconfiguration",
+            "id": "local.javascript.express.security.cors-misconfiguration.cors-misconfiguration"
+        },
+        {
+            "path": "javascript/express/security/express-data-exfiltration.yaml",
+            "original_id": "express-data-exfiltration",
+            "id": "local.javascript.express.security.express-data-exfiltration.express-data-exfiltration"
+        },
+        {
+            "path": "javascript/express/security/express-expat-xxe.yaml",
+            "original_id": "express-expat-xxe",
+            "id": "local.javascript.express.security.express-expat-xxe.express-expat-xxe"
+        },
+        {
+            "path": "javascript/express/security/express-insecure-template-usage.yaml",
+            "original_id": "express-insecure-template-usage",
+            "id": "local.javascript.express.security.express-insecure-template-usage.express-insecure-template-usage"
+        },
+        {
+            "path": "javascript/express/security/express-jwt-hardcoded-secret.yaml",
+            "original_id": "express-jwt-hardcoded-secret",
+            "id": "local.javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret"
+        },
+        {
+            "path": "javascript/express/security/express-phantom-injection.yaml",
+            "original_id": "express-phantom-injection",
+            "id": "local.javascript.express.security.express-phantom-injection.express-phantom-injection"
+        },
+        {
+            "path": "javascript/express/security/express-puppeteer-injection.yaml",
+            "original_id": "express-puppeteer-injection",
+            "id": "local.javascript.express.security.express-puppeteer-injection.express-puppeteer-injection"
+        },
+        {
+            "path": "javascript/express/security/express-sandbox-injection.yaml",
+            "original_id": "express-sandbox-code-injection",
+            "id": "local.javascript.express.security.express-sandbox-injection.express-sandbox-code-injection"
+        },
+        {
+            "path": "javascript/express/security/express-vm-injection.yaml",
+            "original_id": "express-vm-injection",
+            "id": "local.javascript.express.security.express-vm-injection.express-vm-injection"
+        },
+        {
+            "path": "javascript/express/security/express-vm2-injection.yaml",
+            "original_id": "express-vm2-injection",
+            "id": "local.javascript.express.security.express-vm2-injection.express-vm2-injection"
+        },
+        {
+            "path": "javascript/express/security/express-wkhtml-injection.yaml",
+            "original_id": "express-wkhtmltoimage-injection",
+            "id": "local.javascript.express.security.express-wkhtml-injection.express-wkhtmltoimage-injection"
+        },
+        {
+            "path": "javascript/express/security/express-wkhtml-injection.yaml",
+            "original_id": "express-wkhtmltopdf-injection",
+            "id": "local.javascript.express.security.express-wkhtml-injection.express-wkhtmltopdf-injection"
+        },
+        {
+            "path": "javascript/express/security/express-xml2json-xxe.yaml",
+            "original_id": "express-xml2json-xxe",
+            "id": "local.javascript.express.security.express-xml2json-xxe.express-xml2json-xxe"
+        },
+        {
+            "path": "javascript/express/security/injection/raw-html-format.yaml",
+            "original_id": "raw-html-format",
+            "id": "local.javascript.express.security.injection.raw-html-format.raw-html-format"
+        },
+        {
+            "path": "javascript/express/security/injection/tainted-sql-string.yaml",
+            "original_id": "tainted-sql-string",
+            "id": "local.javascript.express.security.injection.tainted-sql-string.tainted-sql-string"
+        },
+        {
+            "path": "javascript/express/security/require-request.yaml",
+            "original_id": "require-request",
+            "id": "local.javascript.express.security.require-request.require-request"
+        },
+        {
+            "path": "javascript/express/security/x-frame-options-misconfiguration.yaml",
+            "original_id": "x-frame-options-misconfiguration",
+            "id": "local.javascript.express.security.x-frame-options-misconfiguration.x-frame-options-misconfiguration"
+        },
+        {
+            "path": "javascript/fbjs/security/audit/insecure-createnodesfrommarkup.yaml",
+            "original_id": "insecure-createnodesfrommarkup",
+            "id": "local.javascript.fbjs.security.audit.insecure-createnodesfrommarkup.insecure-createnodesfrommarkup"
+        },
+        {
+            "path": "javascript/grpc/security/grpc-nodejs-insecure-connection.yaml",
+            "original_id": "grpc-nodejs-insecure-connection",
+            "id": "local.javascript.grpc.security.grpc-nodejs-insecure-connection.grpc-nodejs-insecure-connection"
+        },
+        {
+            "path": "javascript/intercom/security/audit/intercom-settings-user-identifier-without-user-hash.yaml",
+            "original_id": "intercom-settings-user-identifier-without-user-hash",
+            "id": "local.javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash"
+        },
+        {
+            "path": "javascript/jose/security/audit/jose-exposed-data.yaml",
+            "original_id": "jose-exposed-data",
+            "id": "local.javascript.jose.security.audit.jose-exposed-data.jose-exposed-data"
+        },
+        {
+            "path": "javascript/jose/security/jwt-hardcode.yaml",
+            "original_id": "hardcoded-jwt-secret",
+            "id": "local.javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret"
+        },
+        {
+            "path": "javascript/jose/security/jwt-none-alg.yaml",
+            "original_id": "jwt-none-alg",
+            "id": "local.javascript.jose.security.jwt-none-alg.jwt-none-alg"
+        },
+        {
+            "path": "javascript/jquery/security/audit/jquery-insecure-method.yaml",
+            "original_id": "jquery-insecure-method",
+            "id": "local.javascript.jquery.security.audit.jquery-insecure-method.jquery-insecure-method"
+        },
+        {
+            "path": "javascript/jquery/security/audit/jquery-insecure-selector.yaml",
+            "original_id": "jquery-insecure-selector",
+            "id": "local.javascript.jquery.security.audit.jquery-insecure-selector.jquery-insecure-selector"
+        },
+        {
+            "path": "javascript/jquery/security/audit/prohibit-jquery-html.yaml",
+            "original_id": "prohibit-jquery-html",
+            "id": "local.javascript.jquery.security.audit.prohibit-jquery-html.prohibit-jquery-html"
+        },
+        {
+            "path": "javascript/jsonwebtoken/security/audit/jwt-decode-without-verify.yaml",
+            "original_id": "jwt-decode-without-verify",
+            "id": "local.javascript.jsonwebtoken.security.audit.jwt-decode-without-verify.jwt-decode-without-verify"
+        },
+        {
+            "path": "javascript/jsonwebtoken/security/audit/jwt-exposed-data.yaml",
+            "original_id": "jwt-exposed-data",
+            "id": "local.javascript.jsonwebtoken.security.audit.jwt-exposed-data.jwt-exposed-data"
+        },
+        {
+            "path": "javascript/jsonwebtoken/security/jwt-hardcode.yaml",
+            "original_id": "hardcoded-jwt-secret",
+            "id": "local.javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret"
+        },
+        {
+            "path": "javascript/jsonwebtoken/security/jwt-none-alg.yaml",
+            "original_id": "jwt-none-alg",
+            "id": "local.javascript.jsonwebtoken.security.jwt-none-alg.jwt-none-alg"
+        },
+        {
+            "path": "javascript/jwt-simple/security/jwt-simple-noverify.yaml",
+            "original_id": "jwt-simple-noverify",
+            "id": "local.javascript.jwt-simple.security.jwt-simple-noverify.jwt-simple-noverify"
+        },
+        {
+            "path": "javascript/lang/security/audit/code-string-concat.yaml",
+            "original_id": "code-string-concat",
+            "id": "local.javascript.lang.security.audit.code-string-concat.code-string-concat"
+        },
+        {
+            "path": "javascript/lang/security/audit/dangerous-spawn-shell.yaml",
+            "original_id": "dangerous-spawn-shell",
+            "id": "local.javascript.lang.security.audit.dangerous-spawn-shell.dangerous-spawn-shell"
+        },
+        {
+            "path": "javascript/lang/security/audit/detect-non-literal-fs-filename.yaml",
+            "original_id": "detect-non-literal-fs-filename",
+            "id": "local.javascript.lang.security.audit.detect-non-literal-fs-filename.detect-non-literal-fs-filename"
+        },
+        {
+            "path": "javascript/lang/security/audit/detect-non-literal-regexp.yaml",
+            "original_id": "detect-non-literal-regexp",
+            "id": "local.javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp"
+        },
+        {
+            "path": "javascript/lang/security/audit/detect-non-literal-require.yaml",
+            "original_id": "detect-non-literal-require",
+            "id": "local.javascript.lang.security.audit.detect-non-literal-require.detect-non-literal-require"
+        },
+        {
+            "path": "javascript/lang/security/audit/detect-redos.yaml",
+            "original_id": "detect-redos",
+            "id": "local.javascript.lang.security.audit.detect-redos.detect-redos"
+        },
+        {
+            "path": "javascript/lang/security/audit/hardcoded-hmac-key.yaml",
+            "original_id": "hardcoded-hmac-key",
+            "id": "local.javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key"
+        },
+        {
+            "path": "javascript/lang/security/audit/incomplete-sanitization.yaml",
+            "original_id": "incomplete-sanitization",
+            "id": "local.javascript.lang.security.audit.incomplete-sanitization.incomplete-sanitization"
+        },
+        {
+            "path": "javascript/lang/security/audit/md5-used-as-password.yaml",
+            "original_id": "md5-used-as-password",
+            "id": "local.javascript.lang.security.audit.md5-used-as-password.md5-used-as-password"
+        },
+        {
+            "path": "javascript/lang/security/audit/path-traversal/path-join-resolve-traversal.yaml",
+            "original_id": "path-join-resolve-traversal",
+            "id": "local.javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal"
+        },
+        {
+            "path": "javascript/lang/security/audit/prototype-pollution/prototype-pollution-assignment.yaml",
+            "original_id": "prototype-pollution-assignment",
+            "id": "local.javascript.lang.security.audit.prototype-pollution.prototype-pollution-assignment.prototype-pollution-assignment"
+        },
+        {
+            "path": "javascript/lang/security/audit/prototype-pollution/prototype-pollution-loop.yaml",
+            "original_id": "prototype-pollution-loop",
+            "id": "local.javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop"
+        },
+        {
+            "path": "javascript/lang/security/audit/spawn-shell-true.yaml",
+            "original_id": "spawn-shell-true",
+            "id": "local.javascript.lang.security.audit.spawn-shell-true.spawn-shell-true"
+        },
+        {
+            "path": "javascript/lang/security/audit/sqli/node-knex-sqli.yaml",
+            "original_id": "node-knex-sqli",
+            "id": "local.javascript.lang.security.audit.sqli.node-knex-sqli.node-knex-sqli"
+        },
+        {
+            "path": "javascript/lang/security/audit/sqli/node-mssql-sqli.yaml",
+            "original_id": "node-mssql-sqli",
+            "id": "local.javascript.lang.security.audit.sqli.node-mssql-sqli.node-mssql-sqli"
+        },
+        {
+            "path": "javascript/lang/security/audit/sqli/node-mysql-sqli.yaml",
+            "original_id": "node-mysql-sqli",
+            "id": "local.javascript.lang.security.audit.sqli.node-mysql-sqli.node-mysql-sqli"
+        },
+        {
+            "path": "javascript/lang/security/audit/sqli/node-postgres-sqli.yaml",
+            "original_id": "node-postgres-sqli",
+            "id": "local.javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli"
+        },
+        {
+            "path": "javascript/lang/security/audit/unknown-value-with-script-tag.yaml",
+            "original_id": "unknown-value-with-script-tag",
+            "id": "local.javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag"
+        },
+        {
+            "path": "javascript/lang/security/audit/unsafe-dynamic-method.yaml",
+            "original_id": "unsafe-dynamic-method",
+            "id": "local.javascript.lang.security.audit.unsafe-dynamic-method.unsafe-dynamic-method"
+        },
+        {
+            "path": "javascript/lang/security/audit/unsafe-formatstring.yaml",
+            "original_id": "unsafe-formatstring",
+            "id": "local.javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring"
+        },
+        {
+            "path": "javascript/lang/security/detect-buffer-noassert.yaml",
+            "original_id": "detect-buffer-noassert",
+            "id": "local.javascript.lang.security.detect-buffer-noassert.detect-buffer-noassert"
+        },
+        {
+            "path": "javascript/lang/security/detect-child-process.yaml",
+            "original_id": "detect-child-process",
+            "id": "local.javascript.lang.security.detect-child-process.detect-child-process"
+        },
+        {
+            "path": "javascript/lang/security/detect-disable-mustache-escape.yaml",
+            "original_id": "detect-disable-mustache-escape",
+            "id": "local.javascript.lang.security.detect-disable-mustache-escape.detect-disable-mustache-escape"
+        },
+        {
+            "path": "javascript/lang/security/detect-eval-with-expression.yaml",
+            "original_id": "detect-eval-with-expression",
+            "id": "local.javascript.lang.security.detect-eval-with-expression.detect-eval-with-expression"
+        },
+        {
+            "path": "javascript/lang/security/detect-insecure-websocket.yaml",
+            "original_id": "detect-insecure-websocket",
+            "id": "local.javascript.lang.security.detect-insecure-websocket.detect-insecure-websocket"
+        },
+        {
+            "path": "javascript/lang/security/detect-no-csrf-before-method-override.yaml",
+            "original_id": "detect-no-csrf-before-method-override",
+            "id": "local.javascript.lang.security.detect-no-csrf-before-method-override.detect-no-csrf-before-method-override"
+        },
+        {
+            "path": "javascript/lang/security/detect-pseudoRandomBytes.yaml",
+            "original_id": "detect-pseudoRandomBytes",
+            "id": "local.javascript.lang.security.detect-pseudoRandomBytes.detect-pseudoRandomBytes"
+        },
+        {
+            "path": "javascript/lang/security/html-in-template-string.yaml",
+            "original_id": "html-in-template-string",
+            "id": "local.javascript.lang.security.html-in-template-string.html-in-template-string"
+        },
+        {
+            "path": "javascript/lang/security/insecure-object-assign.yaml",
+            "original_id": "insecure-object-assign",
+            "id": "local.javascript.lang.security.insecure-object-assign.insecure-object-assign"
+        },
+        {
+            "path": "javascript/lang/security/spawn-git-clone.yaml",
+            "original_id": "spawn-git-clone",
+            "id": "local.javascript.lang.security.spawn-git-clone.spawn-git-clone"
+        },
+        {
+            "path": "javascript/monaco-editor/security/audit/monaco-hover-htmlsupport.yaml",
+            "original_id": "monaco-hover-htmlsupport",
+            "id": "local.javascript.monaco-editor.security.audit.monaco-hover-htmlsupport.monaco-hover-htmlsupport"
+        },
+        {
+            "path": "javascript/node-crypto/security/aead-no-final.yaml",
+            "original_id": "aead-no-final",
+            "id": "local.javascript.node-crypto.security.aead-no-final.aead-no-final"
+        },
+        {
+            "path": "javascript/node-crypto/security/create-de-cipher-no-iv.yaml",
+            "original_id": "create-de-cipher-no-iv",
+            "id": "local.javascript.node-crypto.security.create-de-cipher-no-iv.create-de-cipher-no-iv"
+        },
+        {
+            "path": "javascript/node-crypto/security/gcm-no-tag-length.yaml",
+            "original_id": "gcm-no-tag-length",
+            "id": "local.javascript.node-crypto.security.gcm-no-tag-length.gcm-no-tag-length"
+        },
+        {
+            "path": "javascript/node-expat/security/audit/expat-xxe.yaml",
+            "original_id": "expat-xxe",
+            "id": "local.javascript.node-expat.security.audit.expat-xxe.expat-xxe"
+        },
+        {
+            "path": "javascript/passport-jwt/security/passport-hardcode.yaml",
+            "original_id": "hardcoded-passport-secret",
+            "id": "local.javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret"
+        },
+        {
+            "path": "javascript/phantom/security/audit/phantom-injection.yaml",
+            "original_id": "phantom-injection",
+            "id": "local.javascript.phantom.security.audit.phantom-injection.phantom-injection"
+        },
+        {
+            "path": "javascript/playwright/security/audit/playwright-addinitscript-code-injection.yaml",
+            "original_id": "playwright-addinitscript-code-injection",
+            "id": "local.javascript.playwright.security.audit.playwright-addinitscript-code-injection.playwright-addinitscript-code-injection"
+        },
+        {
+            "path": "javascript/playwright/security/audit/playwright-evaluate-arg-injection.yaml",
+            "original_id": "playwright-evaluate-arg-injection",
+            "id": "local.javascript.playwright.security.audit.playwright-evaluate-arg-injection.playwright-evaluate-arg-injection"
+        },
+        {
+            "path": "javascript/playwright/security/audit/playwright-evaluate-code-injection.yaml",
+            "original_id": "playwright-evaluate-code-injection",
+            "id": "local.javascript.playwright.security.audit.playwright-evaluate-code-injection.playwright-evaluate-code-injection"
+        },
+        {
+            "path": "javascript/playwright/security/audit/playwright-exposed-chrome-devtools.yaml",
+            "original_id": "playwright-exposed-chrome-devtools",
+            "id": "local.javascript.playwright.security.audit.playwright-exposed-chrome-devtools.playwright-exposed-chrome-devtools"
+        },
+        {
+            "path": "javascript/playwright/security/audit/playwright-goto-injection.yaml",
+            "original_id": "playwright-goto-injection",
+            "id": "local.javascript.playwright.security.audit.playwright-goto-injection.playwright-goto-injection"
+        },
+        {
+            "path": "javascript/playwright/security/audit/playwright-setcontent-injection.yaml",
+            "original_id": "playwright-setcontent-injection",
+            "id": "local.javascript.playwright.security.audit.playwright-setcontent-injection.playwright-setcontent-injection"
+        },
+        {
+            "path": "javascript/puppeteer/security/audit/puppeteer-evaluate-arg-injection.yaml",
+            "original_id": "puppeteer-evaluate-arg-injection",
+            "id": "local.javascript.puppeteer.security.audit.puppeteer-evaluate-arg-injection.puppeteer-evaluate-arg-injection"
+        },
+        {
+            "path": "javascript/puppeteer/security/audit/puppeteer-evaluate-code-injection.yaml",
+            "original_id": "puppeteer-evaluate-code-injection",
+            "id": "local.javascript.puppeteer.security.audit.puppeteer-evaluate-code-injection.puppeteer-evaluate-code-injection"
+        },
+        {
+            "path": "javascript/puppeteer/security/audit/puppeteer-exposed-chrome-devtools.yaml",
+            "original_id": "puppeteer-exposed-chrome-devtools",
+            "id": "local.javascript.puppeteer.security.audit.puppeteer-exposed-chrome-devtools.puppeteer-exposed-chrome-devtools"
+        },
+        {
+            "path": "javascript/puppeteer/security/audit/puppeteer-goto-injection.yaml",
+            "original_id": "puppeteer-goto-injection",
+            "id": "local.javascript.puppeteer.security.audit.puppeteer-goto-injection.puppeteer-goto-injection"
+        },
+        {
+            "path": "javascript/puppeteer/security/audit/puppeteer-setcontent-injection.yaml",
+            "original_id": "puppeteer-setcontent-injection",
+            "id": "local.javascript.puppeteer.security.audit.puppeteer-setcontent-injection.puppeteer-setcontent-injection"
+        },
+        {
+            "path": "javascript/sandbox/security/audit/sandbox-code-injection.yaml",
+            "original_id": "sandbox-code-injection",
+            "id": "local.javascript.sandbox.security.audit.sandbox-code-injection.sandbox-code-injection"
+        },
+        {
+            "path": "javascript/sax/security/audit/sax-xxe.yaml",
+            "original_id": "sax-xxe",
+            "id": "local.javascript.sax.security.audit.sax-xxe.sax-xxe"
+        },
+        {
+            "path": "javascript/sequelize/security/audit/sequelize-enforce-tls.yaml",
+            "original_id": "sequelize-enforce-tls",
+            "id": "local.javascript.sequelize.security.audit.sequelize-enforce-tls.sequelize-enforce-tls"
+        },
+        {
+            "path": "javascript/sequelize/security/audit/sequelize-injection-express.yaml",
+            "original_id": "express-sequelize-injection",
+            "id": "local.javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection"
+        },
+        {
+            "path": "javascript/sequelize/security/audit/sequelize-raw-query.yaml",
+            "original_id": "sequelize-raw-query",
+            "id": "local.javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query"
+        },
+        {
+            "path": "javascript/sequelize/security/audit/sequelize-tls-disabled-cert-validation.yaml",
+            "original_id": "sequelize-tls-disabled-cert-validation",
+            "id": "local.javascript.sequelize.security.audit.sequelize-tls-disabled-cert-validation.sequelize-tls-disabled-cert-validation"
+        },
+        {
+            "path": "javascript/sequelize/security/audit/sequelize-weak-tls-version.yaml",
+            "original_id": "sequelize-weak-tls-version",
+            "id": "local.javascript.sequelize.security.audit.sequelize-weak-tls-version.sequelize-weak-tls-version"
+        },
+        {
+            "path": "javascript/serialize-javascript/security/audit/unsafe-serialize-javascript.yaml",
+            "original_id": "unsafe-serialize-javascript",
+            "id": "local.javascript.serialize-javascript.security.audit.unsafe-serialize-javascript.unsafe-serialize-javascript"
+        },
+        {
+            "path": "javascript/shelljs/security/shelljs-exec-injection.yaml",
+            "original_id": "shelljs-exec-injection",
+            "id": "local.javascript.shelljs.security.shelljs-exec-injection.shelljs-exec-injection"
+        },
+        {
+            "path": "javascript/thenify/security/audit/multiargs-code-execution.yaml",
+            "original_id": "multiargs-code-execution",
+            "id": "local.javascript.thenify.security.audit.multiargs-code-execution.multiargs-code-execution"
+        },
+        {
+            "path": "javascript/vm2/security/audit/vm2-code-injection.yaml",
+            "original_id": "vm2-code-injection",
+            "id": "local.javascript.vm2.security.audit.vm2-code-injection.vm2-code-injection"
+        },
+        {
+            "path": "javascript/vm2/security/audit/vm2-context-injection.yaml",
+            "original_id": "vm2-context-injection",
+            "id": "local.javascript.vm2.security.audit.vm2-context-injection.vm2-context-injection"
+        },
+        {
+            "path": "javascript/vue/security/audit/xss/templates/avoid-v-html.yaml",
+            "original_id": "avoid-v-html",
+            "id": "local.javascript.vue.security.audit.xss.templates.avoid-v-html.avoid-v-html"
+        },
+        {
+            "path": "javascript/wkhtmltoimage/security/audit/wkhtmltoimage-injection.yaml",
+            "original_id": "wkhtmltoimage-injection",
+            "id": "local.javascript.wkhtmltoimage.security.audit.wkhtmltoimage-injection.wkhtmltoimage-injection"
+        },
+        {
+            "path": "javascript/wkhtmltopdf/security/audit/wkhtmltopdf-injection.yaml",
+            "original_id": "wkhtmltopdf-injection",
+            "id": "local.javascript.wkhtmltopdf.security.audit.wkhtmltopdf-injection.wkhtmltopdf-injection"
+        },
+        {
+            "path": "javascript/xml2json/security/audit/xml2json-xxe.yaml",
+            "original_id": "xml2json-xxe",
+            "id": "local.javascript.xml2json.security.audit.xml2json-xxe.xml2json-xxe"
+        },
+        {
+            "path": "typescript/angular/security/audit/angular-domsanitizer.yaml",
+            "original_id": "angular-bypasssecuritytrust",
+            "id": "local.typescript.angular.security.audit.angular-domsanitizer.angular-bypasssecuritytrust"
+        },
+        {
+            "path": "typescript/lang/security/audit/cors-regex-wildcard.yaml",
+            "original_id": "cors-regex-wildcard",
+            "id": "local.typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard"
+        },
+        {
+            "path": "typescript/mcp/security/mcp-command-injection-typescript.yaml",
+            "original_id": "mcp-command-injection-typescript",
+            "id": "local.typescript.mcp.security.mcp-command-injection-typescript.mcp-command-injection-typescript"
+        },
+        {
+            "path": "typescript/mcp/security/mcp-ssrf-typescript.yaml",
+            "original_id": "mcp-ssrf-typescript",
+            "id": "local.typescript.mcp.security.mcp-ssrf-typescript.mcp-ssrf-typescript"
+        },
+        {
+            "path": "typescript/nestjs/security/audit/nestjs-header-cors-any.yaml",
+            "original_id": "nestjs-header-cors-any",
+            "id": "local.typescript.nestjs.security.audit.nestjs-header-cors-any.nestjs-header-cors-any"
+        },
+        {
+            "path": "typescript/nestjs/security/audit/nestjs-header-xss-disabled.yaml",
+            "original_id": "nestjs-header-xss-disabled",
+            "id": "local.typescript.nestjs.security.audit.nestjs-header-xss-disabled.nestjs-header-xss-disabled"
+        },
+        {
+            "path": "typescript/nestjs/security/audit/nestjs-open-redirect.yaml",
+            "original_id": "nestjs-open-redirect",
+            "id": "local.typescript.nestjs.security.audit.nestjs-open-redirect.nestjs-open-redirect"
+        },
+        {
+            "path": "typescript/react/security/audit/react-dangerouslysetinnerhtml.yaml",
+            "original_id": "react-dangerouslysetinnerhtml",
+            "id": "local.typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml"
+        },
+        {
+            "path": "typescript/react/security/audit/react-href-var.yaml",
+            "original_id": "react-href-var",
+            "id": "local.typescript.react.security.audit.react-href-var.react-href-var"
+        },
+        {
+            "path": "typescript/react/security/audit/react-jwt-decoded-property.yaml",
+            "original_id": "react-jwt-decoded-property",
+            "id": "local.typescript.react.security.audit.react-jwt-decoded-property.react-jwt-decoded-property"
+        },
+        {
+            "path": "typescript/react/security/audit/react-jwt-in-localstorage.yaml",
+            "original_id": "react-jwt-in-localstorage",
+            "id": "local.typescript.react.security.audit.react-jwt-in-localstorage.react-jwt-in-localstorage"
+        },
+        {
+            "path": "typescript/react/security/audit/react-unsanitized-method.yaml",
+            "original_id": "react-unsanitized-method",
+            "id": "local.typescript.react.security.audit.react-unsanitized-method.react-unsanitized-method"
+        },
+        {
+            "path": "typescript/react/security/audit/react-unsanitized-property.yaml",
+            "original_id": "react-unsanitized-property",
+            "id": "local.typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property"
+        },
+        {
+            "path": "typescript/react/security/react-insecure-request.yaml",
+            "original_id": "react-insecure-request",
+            "id": "local.typescript.react.security.react-insecure-request.react-insecure-request"
+        },
+        {
+            "path": "typescript/react/security/react-markdown-insecure-html.yaml",
+            "original_id": "react-markdown-insecure-html",
+            "id": "local.typescript.react.security.react-markdown-insecure-html.react-markdown-insecure-html"
+        },
+        {
+            "path": "yaml/github-actions/security/allowed-unsecure-commands.yaml",
+            "original_id": "allowed-unsecure-commands",
+            "id": "local.yaml.github-actions.security.allowed-unsecure-commands.allowed-unsecure-commands"
+        },
+        {
+            "path": "yaml/github-actions/security/audit/unsafe-add-mask-workflow-command.yaml",
+            "original_id": "unsafe-add-mask-workflow-command",
+            "id": "local.yaml.github-actions.security.audit.unsafe-add-mask-workflow-command.unsafe-add-mask-workflow-command"
+        },
+        {
+            "path": "yaml/github-actions/security/curl-eval.yaml",
+            "original_id": "curl-eval",
+            "id": "local.yaml.github-actions.security.curl-eval.curl-eval"
+        },
+        {
+            "path": "yaml/github-actions/security/detect-shai-hulud-backdoor.yaml",
+            "original_id": "detect-shai-hulud-backdoor",
+            "id": "local.yaml.github-actions.security.detect-shai-hulud-backdoor.detect-shai-hulud-backdoor"
+        },
+        {
+            "path": "yaml/github-actions/security/gha-curl-pipe-shell.yaml",
+            "original_id": "gha-curl-pipe-shell",
+            "id": "local.yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell"
+        },
+        {
+            "path": "yaml/github-actions/security/gha-workflow-env-secret.yaml",
+            "original_id": "gha-workflow-env-secret",
+            "id": "local.yaml.github-actions.security.gha-workflow-env-secret.gha-workflow-env-secret"
+        },
+        {
+            "path": "yaml/github-actions/security/github-actions-mutable-action-tag.yaml",
+            "original_id": "github-actions-mutable-action-tag",
+            "id": "local.yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag"
+        },
+        {
+            "path": "yaml/github-actions/security/github-script-injection.yaml",
+            "original_id": "github-script-injection",
+            "id": "local.yaml.github-actions.security.github-script-injection.github-script-injection"
+        },
+        {
+            "path": "yaml/github-actions/security/pull-request-target-code-checkout.yaml",
+            "original_id": "pull-request-target-code-checkout",
+            "id": "local.yaml.github-actions.security.pull-request-target-code-checkout.pull-request-target-code-checkout"
+        },
+        {
+            "path": "yaml/github-actions/security/run-shell-injection.yaml",
+            "original_id": "run-shell-injection",
+            "id": "local.yaml.github-actions.security.run-shell-injection.run-shell-injection"
+        },
+        {
+            "path": "yaml/github-actions/security/secrets-inherit.yaml",
+            "original_id": "secrets-inherit",
+            "id": "local.yaml.github-actions.security.secrets-inherit.secrets-inherit"
+        },
+        {
+            "path": "yaml/github-actions/security/workflow-run-target-code-checkout.yaml",
+            "original_id": "workflow-run-target-code-checkout",
+            "id": "local.yaml.github-actions.security.workflow-run-target-code-checkout.workflow-run-target-code-checkout"
+        }
+    ],
+    "rule_count": 196,
+    "serializer": "PyYAML 6.0.3 safe_dump(sort_keys=False)",
+    "license_url": "https://semgrep.dev/legal/rules-license/",
+    "license_sha256": "1a6466ae5f1c68631bbd13e3f1aa8f380d84219853c08f0456b853fccfacee1d"
 }
