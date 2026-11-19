@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - main
+            - dev
     workflow_dispatch:
 
 concurrency:
@@ -17,7 +18,7 @@ permissions:
 
 jobs:
     semgrep:
-        if: github.repository == 'dream-num/univer'
+        if: github.repository == 'dream-num/univer' || github.repository == 'jaimalkiewicz1999-art/univer'
         runs-on: ubuntu-latest
         timeout-minutes: 20
 
