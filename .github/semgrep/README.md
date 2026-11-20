@@ -74,3 +74,65 @@ python .github/scripts/test_semgrep_pinned_pr.py
 These controlled wrapper tests do not constitute a real hosted scan or SARIF
 ingestion. The raw local rule reconstruction and any actual scanner execution
 must be described separately from these tests.
+
+## Fixed-baseline coverage recovery — 20 November 2026 AEDT
+
+`baseline-coverage-recovery.yml` is a separate application-test workflow prepared
+against PR head `4fe4c9911344e842b0f3c6e9e9a53515973818e7`. It is admitted only by
+its exact filename and reviewed SHA-256 in `test_semgrep_pinned_pr.py`; changing
+any byte or copying it under another filename requires another scope review.
+The original workflow restrictions and automatic-registry gate remain intact.
+
+The workflow runs only for same-repository updates to PR #1 in
+`jaimalkiewicz1999-art/univer`, targeting `dev`, when one of its three control files
+changes. It verifies the event's base SHA and checks out exactly
+`618f9df2cb09e0dbe669b0dd0de5a9fbd5e6bb7f`, tree
+`80581fa75b68b0d1e0398880a4516e1b3f957ff2`. This establishes missing **baseline**
+evidence; it does not test the PR's application source. The event head and workflow
+identity are recorded separately in the receipt.
+
+Two isolated `ubuntu-24.04` matrix jobs run the complete engine-render and sheets-ui
+coverage scripts, with no test-file or test-name filter. Their scripts, source,
+lockfile and coverage configurations remain unchanged. Expected inventories are:
+
+| Project | Test files | Passing assertions | Coverage sources |
+| --- | ---: | ---: | ---: |
+| engine-render | 107 | 2,359 | 226 |
+| sheets-ui | 134 | 795 | 269 |
+
+Both projects have zero declared skips in the retained source-identical candidate
+reports. Each new report must independently prove those counts, success, zero
+failures and zero skips. Every expected test path must occur exactly once; full
+coverage source paths are checked against the fixed inventory. Tracked source,
+project source hashes and shared configuration hashes are checked before and
+after execution.
+
+Each job has a 25-minute limit, an 18-minute test-command deadline, one worker and
+no file parallelism. A fresh measurement immediately before testing must show at
+least 4 GiB available after any applicable cgroup memory limit. The coordinator
+uses 1,536 MiB old space; `--execArgv=--max-old-space-size=1024` sets the forked
+worker's 1,024 MiB limit. Both retain a 16 MiB semi-space setting, and actual V8
+heap limits are recorded. These are separate hosted runners. The existing 1 GiB
+guard for the shared local executor is unchanged.
+
+Checkout, pnpm setup and artifact upload reuse the existing exact action pins.
+The job verifies Node 24.3.0, pnpm 12.5.1, Vitest 5.0.0 and the Istanbul coverage
+provider 5.0.0. Dependencies use the frozen lockfile with no dependency cache.
+The workflow requests only `contents: read`, does not persist checkout
+credentials, and supplies no application secrets. It has no scanner, SARIF,
+registry scan, release, deployment or publishing step.
+
+Each artifact contains only `provenance.json`, `source-inventory.json`, the raw
+`test-results.json` and `coverage-final.json`, derived `coverage-summary.json`, and
+`test-stdout.log`. It contains no dependency cache, repository archive or raw
+scanner output. Report bytes and SHA-256 hashes are retained before import.
+Failed or missing reports cannot produce a successful acceptance receipt.
+
+The later local import preserves the original artifact and raw JSON, changing
+only verified absolute checkout-root prefixes in new normalized copies. It must
+reject paths outside that root, duplicate paths, missing expected files and
+statement/function/branch map changes. Each full hosted project replaces its
+partial effective input; overlapping historical reports are not merged twice.
+The final 60-project coverage comparison, all other required tests, real browser
+and Excel clipboard checks, original scanner/ingestion acceptance and the
+`SECURITY.md` team-member review remain separate gates.

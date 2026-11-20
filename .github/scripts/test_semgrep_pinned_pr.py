@@ -21,6 +21,8 @@ PRIVATE = "PRIVATE_FINDING_DO_NOT_PUBLISH"
 # This exact application-only workflow was reviewed independently. Any change
 # requires a new review; its same-repository guard is not a general exception.
 REVIEWED_APPLICATION_WORKFLOW_SHA256 = "dae134f086290e1318c1ee918d2462c9631c4399883d2a8a1c62a91786f22646"
+# Separate exact-byte exception for the fixed-base application coverage recovery.
+REVIEWED_BASELINE_RECOVERY_WORKFLOW_SHA256 = "5a134ca2262cbbcedf06d1043d53512b8863849d5d100aa51cebf87e7dea45ff"
 LOG = (
     PRIVATE + " /private/source.js unsafe example\n"
     "Rules run: 191\nTargets scanned: 7233\nFindings: 154\n"
@@ -221,6 +223,10 @@ class WorkflowTests(unittest.TestCase):
                 self.assertEqual(wrapper.digest(path), REVIEWED_APPLICATION_WORKFLOW_SHA256,
                                  "Application workflow changed; review its complete execution scope")
                 continue
+            if path.name == "baseline-coverage-recovery.yml":
+                self.assertEqual(wrapper.digest(path), REVIEWED_BASELINE_RECOVERY_WORKFLOW_SHA256,
+                                 "Baseline recovery changed; review its complete execution scope")
+                continue
             workflow = self.yaml.load(path.read_text())
             self.assertNotIn("workflow_run", workflow["on"])
             self.assertNotIn("pull_request_target", workflow["on"])
@@ -256,6 +262,63 @@ class WorkflowTests(unittest.TestCase):
             root = Path(directory)
             (root / "security-semgrep.yml").write_bytes((self.directory / "security-semgrep.yml").read_bytes())
             (root / "unreviewed-application.yml").write_bytes((self.directory / "clipboard-pr-acceptance.yml").read_bytes())
+            with patch.object(self, "directory", root), self.assertRaises(AssertionError):
+                self.assert_workflow_admission()
+
+    def test_baseline_recovery_is_read_only_and_bound_to_the_reviewed_base(self):
+        workflow = self.yaml.load((self.directory / "baseline-coverage-recovery.yml").read_text())
+        self.assertEqual(set(workflow["on"]), {"pull_request"})
+        self.assertEqual(workflow["on"]["pull_request"]["branches"], ["dev"])
+        self.assertEqual(workflow["permissions"], {"contents": "read"})
+        self.assertEqual(set(workflow["jobs"]), {"baseline"})
+        job = workflow["jobs"]["baseline"]
+        self.assertEqual(job["if"], "github.repository == 'jaimalkiewicz1999-art/univer' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.number == 1")
+        self.assertEqual(job["timeout-minutes"], 25)
+        self.assertEqual(job["strategy"]["matrix"], {"project": ["engine-render", "sheets-ui"]})
+        self.assertNotIn("permissions", job)
+        checkout = next(s for s in job["steps"] if s.get("uses", "").startswith("actions/checkout@"))
+        self.assertEqual(checkout["with"]["ref"], "618f9df2cb09e0dbe669b0dd0de5a9fbd5e6bb7f")
+        self.assertFalse(checkout["with"]["persist-credentials"])
+        setup = next(s for s in job["steps"] if s.get("uses", "").startswith("pnpm/setup@"))
+        self.assertFalse(setup["with"]["cache"])
+        upload = next(s for s in job["steps"] if s.get("uses", "").startswith("actions/upload-artifact@"))
+        self.assertEqual(upload["with"]["path"].splitlines(), [
+            "${{ env.EVIDENCE_DIR }}/" + name for name in ["provenance.json", "source-inventory.json",
+            "test-results.json", "coverage-final.json", "coverage-summary.json", "test-stdout.log"]])
+        for step in job["steps"]:
+            self.assertNotIn("continue-on-error", step)
+            if "uses" in step:
+                self.assertRegex(step["uses"], r"^[a-z-]+/[a-z-]+@[0-9a-f]{40}$")
+        self.assertNotIn("secrets.", json.dumps(workflow))
+
+    def test_unreviewed_baseline_recovery_mutations_are_rejected(self):
+        original = (self.directory / "baseline-coverage-recovery.yml").read_text()
+        auto = (self.directory / "security-semgrep.yml").read_text()
+        mutations = [
+            original.replace("pull_request:", "pull_request_target:", 1),
+            original.replace("contents: read", "contents: write", 1),
+            original.replace("jaimalkiewicz1999-art/univer", "unreviewed-owner/univer", 1),
+            original.replace("ref: 618f9df2cb09e0dbe669b0dd0de5a9fbd5e6bb7f", "ref: ${{ github.event.pull_request.head.sha }}", 1),
+            original.replace("persist-credentials: false", "persist-credentials: true", 1),
+            original.replace('"coverage", "--maxWorkers=1"', '"coverage", "src/one.spec.ts", "--maxWorkers=1"', 1),
+            original.replace("--max-old-space-size=1024", "--max-old-space-size=1536", 1),
+            original.replace("${{ env.EVIDENCE_DIR }}/test-stdout.log", "${{ env.SOURCE_ROOT }}/**", 1),
+        ]
+        for mutated in mutations:
+            self.assertNotEqual(mutated, original)
+            with self.subTest(workflow=hashlib.sha256(mutated.encode()).hexdigest()), \
+                 tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / "security-semgrep.yml").write_text(auto)
+                (root / "baseline-coverage-recovery.yml").write_text(mutated)
+                with patch.object(self, "directory", root), self.assertRaises(AssertionError):
+                    self.assert_workflow_admission()
+
+    def test_baseline_recovery_exception_does_not_admit_another_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "security-semgrep.yml").write_bytes((self.directory / "security-semgrep.yml").read_bytes())
+            (root / "unreviewed-recovery.yml").write_bytes((self.directory / "baseline-coverage-recovery.yml").read_bytes())
             with patch.object(self, "directory", root), self.assertRaises(AssertionError):
                 self.assert_workflow_admission()
 
