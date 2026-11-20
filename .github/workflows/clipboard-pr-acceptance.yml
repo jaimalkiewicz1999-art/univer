@@ -1,0 +1,99 @@
+name: Clipboard workspace acceptance
+
+on:
+    pull_request:
+        branches: [dev]
+        types: [opened, synchronize, reopened]
+        paths:
+            - .github/workflows/clipboard-pr-acceptance.yml
+            - package.json
+            - pnpm-lock.yaml
+            - pnpm-workspace.yaml
+            - eslint.config.ts
+            - common/shared/**
+            - packages/core/**
+            - packages/design/**
+            - packages/engine-render/**
+            - packages/protocol/**
+            - packages/themes/**
+            - packages/ui/**
+
+permissions:
+    contents: read
+
+concurrency:
+    group: clipboard-workspace-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
+
+env:
+    HUSKY: '0'
+    TURBO_TELEMETRY_DISABLED: '1'
+
+jobs:
+    clipboard:
+        name: Clipboard specs, UI types and scoped lint
+        if: >-
+            github.repository == 'jaimalkiewicz1999-art/univer' &&
+            github.event.pull_request.head.repo.full_name == github.repository
+        runs-on: ubuntu-24.04
+        timeout-minutes: 30
+        steps:
+            - name: Checkout exact PR source
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  persist-credentials: false
+
+            - name: Setup repository pnpm and Node.js versions
+              uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2
+              with:
+                  version: 12.5.1
+                  runtime: node@24.3.0
+                  install: false
+                  cache: false
+
+            - name: Verify source and toolchain
+              env:
+                  EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+              run: |
+                  test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+                  test "$(node --version)" = 'v24.3.0'
+                  test "$(pnpm --version)" = '12.5.1'
+                  node --input-type=module <<'NODE'
+                  import assert from 'node:assert/strict';
+                  import { readFileSync } from 'node:fs';
+                  const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
+                  assert.equal(manifest.packageManager, 'pnpm@12.5.1');
+                  console.log(JSON.stringify({ source: process.env.EXPECTED_HEAD_SHA, node: process.version, packageManager: manifest.packageManager }));
+                  NODE
+
+            - name: Install frozen workspace dependencies
+              run: pnpm install --frozen-lockfile --no-runtime
+
+            - name: Record installed test and analysis versions
+              run: |
+                  pnpm --filter @univerjs/ui exec vitest --version
+                  pnpm --filter @univerjs/ui exec tsc --version
+                  pnpm exec eslint --version
+                  pnpm --filter @univerjs-infra/shared exec node -p "require('happy-dom/package.json').version"
+
+            - name: Run real workspace clipboard specs
+              run: >-
+                  pnpm --filter @univerjs/ui test
+                  src/services/clipboard/__tests__/clipboard-interface.service.spec.ts
+                  src/services/clipboard/__tests__/clipboard-utils.spec.ts
+                  src/services/clipboard/__tests__/clipboard.command.spec.ts
+                  --maxWorkers=1 --no-file-parallelism
+
+            - name: Typecheck the UI package
+              run: pnpm --filter @univerjs/ui typecheck
+
+            - name: Lint the changed source, spec and acceptance workflow
+              run: >-
+                  pnpm exec eslint
+                  packages/ui/src/services/clipboard/clipboard-interface.service.ts
+                  packages/ui/src/services/clipboard/__tests__/clipboard-interface.service.spec.ts
+                  .github/workflows/clipboard-pr-acceptance.yml
+
+            - name: Verify tracked source and lockfile stayed unchanged
+              run: git diff --exit-code HEAD

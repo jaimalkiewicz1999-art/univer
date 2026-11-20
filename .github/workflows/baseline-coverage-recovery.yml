@@ -1,0 +1,335 @@
+name: Fixed-baseline coverage recovery
+
+on:
+    pull_request:
+        branches: [dev]
+        types: [opened, synchronize, reopened]
+        paths:
+            - .github/workflows/baseline-coverage-recovery.yml
+            - .github/scripts/test_semgrep_pinned_pr.py
+            - .github/semgrep/README.md
+
+permissions:
+    contents: read
+
+concurrency:
+    group: baseline-coverage-recovery-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
+
+env:
+    HUSKY: '0'
+    TURBO_TELEMETRY_DISABLED: '1'
+    DO_NOT_TRACK: '1'
+    CI: 'true'
+    NO_COLOR: '1'
+
+jobs:
+    baseline:
+        name: Baseline coverage (${{ matrix.project }})
+        if: >-
+            github.repository == 'jaimalkiewicz1999-art/univer' &&
+            github.event.pull_request.head.repo.full_name == github.repository &&
+            github.event.pull_request.number == 1
+        runs-on: ubuntu-24.04
+        timeout-minutes: 25
+        strategy:
+            fail-fast: false
+            max-parallel: 2
+            matrix:
+                project: [engine-render, sheets-ui]
+        env:
+            RECOVERY_PROJECT: ${{ matrix.project }}
+            SOURCE_ROOT: ${{ github.workspace }}/baseline
+            EVIDENCE_DIR: ${{ github.workspace }}/baseline-recovery/${{ matrix.project }}
+            TMPDIR: ${{ github.workspace }}/baseline-tmp/${{ matrix.project }}
+            EVENT_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+            EVENT_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        steps:
+            - name: Require the reviewed PR base
+              run: |
+                  test "$EVENT_BASE_SHA" = '618f9df2cb09e0dbe669b0dd0de5a9fbd5e6bb7f'
+                  mkdir -p "$EVIDENCE_DIR" "$TMPDIR"
+            - name: Checkout the exact baseline
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  ref: 618f9df2cb09e0dbe669b0dd0de5a9fbd5e6bb7f
+                  path: baseline
+                  persist-credentials: false
+            - name: Setup repository pnpm and Node.js versions
+              uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2
+              with:
+                  version: 12.5.1
+                  runtime: node@24.3.0
+                  install: false
+                  cache: false
+            - name: Prepare bounded evidence verification
+              shell: bash
+              run: |
+                  mkdir -p "$EVIDENCE_DIR" "$TMPDIR"
+                  cat > "$TMPDIR/recovery.py" <<'PY'
+                  import hashlib
+                  import json
+                  import os
+                  from pathlib import Path
+                  import re
+                  import shutil
+                  import subprocess
+                  import sys
+                  from datetime import datetime, timezone
+
+                  BASE = "618f9df2cb09e0dbe669b0dd0de5a9fbd5e6bb7f"
+                  TREE = "80581fa75b68b0d1e0398880a4516e1b3f957ff2"
+                  PREPARED_AGAINST = "4fe4c9911344e842b0f3c6e9e9a53515973818e7"
+                  EXPECTED = {'projects': {'engine-render': {'project': 'packages/engine-render', 'packageName': '@univerjs/engine-render', 'testFiles': 107, 'assertions': 2359, 'coverageSources': 226, 'testPathsSha256': '524cbd1cc1acf98e1caba557481317b17336efb6f29063f7f0ee4755b5fa91ba', 'coveragePathsSha256': '9605dbab39073d237c21a21c5dae8af0d7b5625cbe73ee909a886154bd6a2cc7', 'projectSourcePairsSha256': '002623d89403db97e757cef3494e7ba382aba93aa284c5906efaf2d7a3c33bd0'}, 'sheets-ui': {'project': 'packages/sheets-ui', 'packageName': '@univerjs/sheets-ui', 'testFiles': 134, 'assertions': 795, 'coverageSources': 269, 'testPathsSha256': 'bb0d95a87fa5ee8efa8ad9e5950c22ae3b2a5c0035c413fab266e3cf8ba76509', 'coveragePathsSha256': '27c37d295f978b75b854ee8b32ed0eb2c9174c7ce9daf8766d06f1ff6a4ab96f', 'projectSourcePairsSha256': 'cfc32d7d56218bb79a9bc19b9e6fd5b830d199387850e35c01f3d7a03153fffd'}}, 'shared': {'package.json': '302ad80588069bfa84c48d80012c313e1578754ab520776b4675acc81e684fa1', 'pnpm-lock.yaml': '7bc18a99259f9aa05333d4436a4717ae309145cec27508623c7f3128dd00a613', 'pnpm-workspace.yaml': '7ec214cec7ac4f8010d53fda637f7ad06a334de11ebbf78fe80232385f932078', 'common/shared/package.json': 'b235ac6b3865bd82c9e086298856070025408ec8e0ee02c19dbf932b7321c24b', 'common/shared/vitest/index.ts': 'bdee1771630bfa7a74ea20893f275db439802f6ae8a229af86f3c784c5d72a1b'}}
+
+                  def now():
+                      return datetime.now(timezone.utc).isoformat()
+
+                  def digest(value):
+                      return hashlib.sha256(value).hexdigest()
+
+                  def canonical(value):
+                      return json.dumps(value, ensure_ascii=True, separators=(",", ":")).encode()
+
+                  def require(condition, code):
+                      if not condition:
+                          raise ValueError(code)
+
+                  def unique_object(pairs):
+                      result = {}
+                      for key, value in pairs:
+                          require(key not in result, "DUPLICATE_JSON_KEY")
+                          result[key] = value
+                      return result
+
+                  def command(argv, cwd):
+                      return subprocess.check_output(argv, cwd=cwd, text=True).strip()
+
+                  def source_snapshot(root, expected):
+                      project = expected["project"]
+                      paths = subprocess.check_output(["git", "ls-files", "-z", "--", project], cwd=root).decode().split("\0")
+                      hashes = {p: digest((root / p).read_bytes()) for p in sorted(filter(None, paths))}
+                      tests = sorted(p for p in hashes if re.search(r"\.(test|spec)\.[cm]?[jt]sx?$", p))
+                      shared = {p: digest((root / p).read_bytes()) for p in EXPECTED["shared"]}
+                      state = {
+                          "head": command(["git", "rev-parse", "HEAD"], root),
+                          "tree": command(["git", "rev-parse", "HEAD^{tree}"], root),
+                          "trackedStatus": command(["git", "status", "--porcelain", "--untracked-files=no"], root),
+                          "sourcePairsSha256": digest(canonical(sorted(hashes.items()))),
+                          "sharedSourceSha256": shared,
+                      }
+                      require(state["head"] == BASE and state["tree"] == TREE, "SOURCE_IDENTITY")
+                      require(state["trackedStatus"] == "", "TRACKED_SOURCE_CHANGED")
+                      require(shared == EXPECTED["shared"], "SHARED_SOURCE_CHANGED")
+                      require(state["sourcePairsSha256"] == expected["projectSourcePairsSha256"], "PROJECT_SOURCE_CHANGED")
+                      require(len(tests) == expected["testFiles"] and digest(canonical(tests)) == expected["testPathsSha256"], "TEST_INVENTORY")
+                      manifest = json.loads((root / project / "package.json").read_text())
+                      require(manifest["name"] == expected["packageName"] and manifest["scripts"]["coverage"] == "vitest run --coverage", "COVERAGE_SCRIPT")
+                      return state, {"project": project, "projectSourceSha256": hashes, "sharedSourceSha256": shared, "expectedTestFiles": tests}
+
+                  def memory_snapshot():
+                      meminfo = dict(line.split(":", 1) for line in Path("/proc/meminfo").read_text().splitlines())
+                      available = int(meminfo["MemAvailable"].split()[0]) * 1024
+                      limits = []
+                      for line in Path("/proc/self/cgroup").read_text().splitlines():
+                          _, controllers, group = line.split(":", 2)
+                          if controllers == "":
+                              mount, limit_name, current_name = Path("/sys/fs/cgroup"), "memory.max", "memory.current"
+                          elif "memory" in controllers.split(","):
+                              mount, limit_name, current_name = Path("/sys/fs/cgroup/memory"), "memory.limit_in_bytes", "memory.usage_in_bytes"
+                          else:
+                              continue
+                          leaf = (mount / group.lstrip("/")).resolve()
+                          require(leaf == mount or mount in leaf.parents, "CGROUP_PATH")
+                          directories = [leaf, *[p for p in leaf.parents if p == mount or mount in p.parents]]
+                          for directory in directories:
+                              limit_file = directory / limit_name
+                              if not limit_file.is_file():
+                                  continue
+                              raw_limit = limit_file.read_text().strip()
+                              limit = None if raw_limit == "max" or int(raw_limit) >= 2**60 else int(raw_limit)
+                              current = int((directory / current_name).read_text().strip())
+                              remaining = None if limit is None else max(0, limit - current)
+                              limits.append({"scope": str(directory), "limitBytes": limit, "currentBytes": current, "availableBytes": remaining})
+                      effective = min([available, *[x["availableBytes"] for x in limits if x["availableBytes"] is not None]])
+                      return {"measuredAt": now(), "hostAvailableBytes": available, "cgroupLimits": limits,
+                              "effectiveAvailableBytes": effective, "minimumAvailableBytes": 4 * 1024**3,
+                              "passed": effective >= 4 * 1024**3, "swapCounted": False}
+
+                  def main():
+                      stage = sys.argv[1]
+                      root = Path(os.environ["SOURCE_ROOT"]).resolve()
+                      output = Path(os.environ["EVIDENCE_DIR"])
+                      temporary = Path(os.environ["TMPDIR"])
+                      expected = EXPECTED["projects"][os.environ["RECOVERY_PROJECT"]]
+                      target = output / "provenance.json"
+                      record = json.loads(target.read_text()) if target.exists() else {
+                          "schemaVersion": 1, "repository": "jaimalkiewicz1999-art/univer", "project": expected["project"],
+                          "sourceRoot": str(root), "preparedAgainstCommit": PREPARED_AGAINST,
+                          "requiredBaseCommit": BASE, "requiredBaseTree": TREE,
+                          "event": {"name": os.environ["GITHUB_EVENT_NAME"], "pullRequest": 1,
+                                    "baseSha": os.environ["EVENT_BASE_SHA"], "headSha": os.environ["EVENT_HEAD_SHA"]},
+                          "github": {key: os.environ[env] for key, env in {
+                              "runId": "GITHUB_RUN_ID", "runAttempt": "GITHUB_RUN_ATTEMPT", "job": "GITHUB_JOB",
+                              "workflowRef": "GITHUB_WORKFLOW_REF", "workflowSha": "GITHUB_WORKFLOW_SHA",
+                              "runnerName": "RUNNER_NAME", "runnerOS": "RUNNER_OS"}.items()},
+                          "expectations": expected, "reports": {}, "stageFailures": [],
+                      }
+                      code = 0
+                      try:
+                          if stage == "before":
+                              require(record["event"]["name"] == "pull_request" and record["event"]["baseSha"] == BASE, "EVENT_BASE")
+                              record["sourceBefore"], inventory = source_snapshot(root, expected)
+                              (output / "source-inventory.json").write_text(json.dumps(inventory, indent=2) + "\n")
+                              require(command(["node", "--version"], root) == "v24.3.0", "NODE_VERSION")
+                              require(command(["pnpm", "--version"], root) == "12.5.1", "PNPM_VERSION")
+                              require(json.loads((root / "package.json").read_text())["packageManager"] == "pnpm@12.5.1", "PACKAGE_MANAGER")
+                          elif stage == "preflight":
+                              record["sourceAfterInstall"], _ = source_snapshot(root, expected)
+                              record["runtime"] = json.loads((temporary / "runtime.json").read_text())
+                              require(record["runtime"] == {"node": "24.3.0", "pnpm": "12.5.1", "vitest": "5.0.0", "coverageProvider": "@vitest/coverage-istanbul@5.0.0"}, "INSTALLED_RUNTIME")
+                              record["memoryPreflight"] = memory_snapshot()
+                              require(record["memoryPreflight"]["passed"], "HOST_MEMORY_BELOW_4_GIB")
+                          elif stage == "run":
+                              require(record.get("memoryPreflight", {}).get("passed") is True and not record["stageFailures"], "PREFLIGHT_REQUIRED")
+                              require(not os.environ.get("NODE_OPTIONS"), "INHERITED_NODE_OPTIONS")
+                              argv = ["pnpm", "--filter", expected["packageName"], "coverage", "--maxWorkers=1", "--no-file-parallelism",
+                                      "--execArgv=--max-old-space-size=1024", "--reporter=default", "--reporter=json", "--outputFile=coverage/test-results.json"]
+                              node_options = f"--max-old-space-size=1536 --max-semi-space-size=16 --require={temporary / 'heap-probe.cjs'}"
+                              wrapper = ["timeout", "--signal=TERM", "--kill-after=10s", "18m", *argv]
+                              record["command"] = {"argv": argv, "wrapperArgv": wrapper, "cwd": str(root), "nodeOptions": node_options,
+                                                   "startedAt": now(), "finishedAt": None, "exitCode": None}
+                              target.write_text(json.dumps(record, indent=2) + "\n")
+                              env = {**os.environ, "NODE_OPTIONS": node_options, "RECOVERY_HEAP_LOG": str(temporary / "heap.jsonl")}
+                              with (output / "test-stdout.log").open("wb") as log:
+                                  result = subprocess.run(wrapper, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT, check=False)
+                              record["command"].update(finishedAt=now(), exitCode=result.returncode)
+                              code = 0 if result.returncode == 0 else 1
+                          elif stage == "after":
+                              record["sourceAfter"], _ = source_snapshot(root, expected)
+                              checks = {"sourceUnchanged": record.get("sourceBefore") == record["sourceAfter"],
+                                        "commandSucceeded": record.get("command", {}).get("exitCode") == 0,
+                                        "preflightPassed": record.get("memoryPreflight", {}).get("passed") is True,
+                                        "noStageFailures": not record["stageFailures"]}
+                              heap_file = temporary / "heap.jsonl"
+                              record["heapObservations"] = [json.loads(line) for line in heap_file.read_text().splitlines()] if heap_file.exists() else []
+                              for role, old_space in [("coordinator", 1536), ("worker", 1024)]:
+                                  values = [x["heapSizeLimitBytes"] for x in record["heapObservations"] if x["role"] == role]
+                                  checks[role + "HeapObserved"] = bool(values) and all(old_space * 1024**2 <= x <= (old_space + 64) * 1024**2 for x in values)
+                              for filename in ["test-results.json", "coverage-final.json"]:
+                                  source = root / expected["project"] / "coverage" / filename
+                                  if source.is_file():
+                                      shutil.copyfile(source, output / filename)
+                                  checks[filename + "Present"] = source.is_file()
+                              tests = None
+                              if checks["test-results.jsonPresent"]:
+                                  tests = json.loads((output / "test-results.json").read_text(), object_pairs_hook=unique_object)
+                                  prefix = str(root) + "/"
+                                  suites = tests["testResults"]
+                                  names = [s["name"] for s in suites]
+                                  paths = sorted(n[len(prefix):] for n in names if n.startswith(prefix))
+                                  assertions = [a for s in suites for a in s["assertionResults"]]
+                                  checks["allTestFilesExactlyOnce"] = len(names) == len(set(names)) == len(paths) == expected["testFiles"] and digest(canonical(paths)) == expected["testPathsSha256"]
+                                  checks["allAssertionsPassed"] = tests.get("success") is True and tests.get("numFailedTestSuites") == 0 and tests.get("numFailedTests") == 0 and tests.get("numPendingTests") == 0 and tests.get("numTotalTests") == tests.get("numPassedTests") == len(assertions) == expected["assertions"] and all(a.get("status") == "passed" for a in assertions)
+                                  record["testSummary"] = {k: tests.get(k) for k in ["success", "numTotalTests", "numPassedTests", "numFailedTests", "numPendingTests", "numFailedTestSuites"]}
+                              if checks["coverage-final.jsonPresent"]:
+                                  coverage = json.loads((output / "coverage-final.json").read_text(), object_pairs_hook=unique_object)
+                                  checks["embeddedCoverageMatches"] = tests is not None and tests.get("coverageMap") == coverage
+                                  prefix = str(root) + "/"
+                                  paths = sorted(n[len(prefix):] for n in coverage if n.startswith(prefix))
+                                  checks["allCoverageSources"] = len(coverage) == len(paths) == expected["coverageSources"] and digest(canonical(paths)) == expected["coveragePathsSha256"] and all(v.get("path") == n for n, v in coverage.items())
+                                  result = subprocess.run(["node", str(temporary / "summarize.mjs")], cwd=root, check=False)
+                                  checks["summaryProduced"] = result.returncode == 0 and (output / "coverage-summary.json").is_file()
+                              for filename in ["source-inventory.json", "test-results.json", "coverage-final.json", "coverage-summary.json", "test-stdout.log"]:
+                                  path = output / filename
+                                  if path.is_file():
+                                      data = path.read_bytes()
+                                      record["reports"][filename] = {"sha256": digest(data), "bytes": len(data)}
+                              record["acceptance"] = {"success": all(checks.values()), "checks": checks, "failures": [k for k, v in checks.items() if not v]}
+                              code = 0 if record["acceptance"]["success"] else 1
+                          else:
+                              raise ValueError("UNKNOWN_STAGE")
+                      except Exception as error:
+                          record["stageFailures"].append({"stage": stage, "code": str(error) if isinstance(error, ValueError) and re.fullmatch(r"[A-Z0-9_]+", str(error)) else "STAGE_EXCEPTION"})
+                          record["acceptance"] = {"success": False, "checks": {}, "failures": ["stageFailure"]}
+                          code = 1
+                      target.write_text(json.dumps(record, indent=2) + "\n")
+                      print(json.dumps({"project": expected["project"], "stage": stage, "exitCode": code, "acceptance": record.get("acceptance")}))
+                      return code
+
+                  if __name__ == "__main__":
+                      sys.exit(main())
+                  PY
+                  cat > "$TMPDIR/heap-probe.cjs" <<'JS'
+                  'use strict';
+                  const fs = require('node:fs');
+                  const v8 = require('node:v8');
+                  const entry = String(process.argv[1] || '').replaceAll('\\', '/');
+                  const role = entry.endsWith('/vitest.mjs') ? 'coordinator'
+                      : entry.endsWith('/vitest/dist/workers/forks.js') ? 'worker' : 'launcher';
+                  function sample(event) {
+                      fs.appendFileSync(process.env.RECOVERY_HEAP_LOG, JSON.stringify({
+                          at: new Date().toISOString(), event, role, pid: process.pid, ppid: process.ppid,
+                          node: process.versions.node, heapSizeLimitBytes: v8.getHeapStatistics().heap_size_limit,
+                          memoryArguments: process.execArgv.filter(arg => arg.startsWith('--max-old-space-size=') || arg.startsWith('--max-semi-space-size=')),
+                      }) + '\n');
+                  }
+                  sample('start');
+                  process.on('exit', () => sample('exit'));
+                  JS
+                  cat > "$TMPDIR/runtime.mjs" <<'JS'
+                  import assert from 'node:assert/strict';
+                  import { execFileSync } from 'node:child_process';
+                  import { writeFileSync } from 'node:fs';
+                  import { createRequire } from 'node:module';
+                  import path from 'node:path';
+                  const root = process.env.SOURCE_ROOT;
+                  const projectRequire = createRequire(path.join(root, 'packages', process.env.RECOVERY_PROJECT, 'package.json'));
+                  const sharedRequire = createRequire(path.join(root, 'common/shared/package.json'));
+                  const result = {
+                      node: process.versions.node,
+                      pnpm: execFileSync('pnpm', ['--version'], { encoding: 'utf8' }).trim(),
+                      vitest: projectRequire('vitest/package.json').version,
+                      coverageProvider: `@vitest/coverage-istanbul@${sharedRequire('@vitest/coverage-istanbul/package.json').version}`,
+                  };
+                  assert.deepEqual(result, { node: '24.3.0', pnpm: '12.5.1', vitest: '5.0.0', coverageProvider: '@vitest/coverage-istanbul@5.0.0' });
+                  writeFileSync(path.join(process.env.TMPDIR, 'runtime.json'), JSON.stringify(result, null, 2) + '\n');
+                  JS
+                  cat > "$TMPDIR/summarize.mjs" <<'JS'
+                  import { readFileSync, writeFileSync } from 'node:fs';
+                  import { createRequire } from 'node:module';
+                  import path from 'node:path';
+                  const sharedRequire = createRequire(path.join(process.env.SOURCE_ROOT, 'common/shared/package.json'));
+                  const coverageRequire = createRequire(sharedRequire.resolve('@vitest/coverage-istanbul'));
+                  const { createCoverageMap } = coverageRequire('@vitest/istanbul-lib-coverage');
+                  const output = process.env.EVIDENCE_DIR;
+                  const raw = JSON.parse(readFileSync(path.join(output, 'coverage-final.json'), 'utf8'));
+                  writeFileSync(path.join(output, 'coverage-summary.json'), JSON.stringify(createCoverageMap(raw).getCoverageSummary().toJSON(), null, 2) + '\n');
+                  JS
+                  python3 "$TMPDIR/recovery.py" before
+            - name: Install frozen workspace dependencies
+              working-directory: baseline
+              run: pnpm install --frozen-lockfile --no-runtime
+            - name: Verify installed runtime and fresh runner memory
+              run: |
+                  node "$TMPDIR/runtime.mjs"
+                  python3 "$TMPDIR/recovery.py" preflight
+            - name: Run the complete baseline project
+              run: python3 "$TMPDIR/recovery.py" run
+            - name: Verify raw reports and unchanged source
+              if: ${{ always() }}
+              run: python3 "$TMPDIR/recovery.py" after
+            - name: Upload bounded baseline evidence
+              if: ${{ always() }}
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+              with:
+                  name: baseline-coverage-${{ matrix.project }}-${{ github.run_id }}-${{ github.run_attempt }}
+                  path: |
+                      ${{ env.EVIDENCE_DIR }}/provenance.json
+                      ${{ env.EVIDENCE_DIR }}/source-inventory.json
+                      ${{ env.EVIDENCE_DIR }}/test-results.json
+                      ${{ env.EVIDENCE_DIR }}/coverage-final.json
+                      ${{ env.EVIDENCE_DIR }}/coverage-summary.json
+                      ${{ env.EVIDENCE_DIR }}/test-stdout.log
+                  if-no-files-found: error
+                  retention-days: 14
